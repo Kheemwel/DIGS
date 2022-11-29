@@ -1,8 +1,7 @@
 # DIGS
 <!--- just --->
-Project namin para sa Application Development and Emerging Technologies
- <br/>
-Project Manager: Perry Andre Moya \
-Lead Developer: Kimwel Lourence Beller  \
-Artist: Rehum Baraquil  \
+Project namin para sa Application Development and Emerging Technologies<br/> <br/>
+Project Manager: Perry Andre Moya  <br/>
+Lead Developer: Kimwel Lourence Beller  <br/>
+Artist: Rehum Baraquil  <br/>
 Moral Support: Fhranz Joseph Benosa
