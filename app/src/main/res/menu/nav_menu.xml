@@ -3,7 +3,7 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         tools:showIn="navigation_view">
-
+<!--This is the list of items that will be displayed in navigation drawer-->
     <item
             android:id="@+id/nav_settings"
             android:icon="@drawable/ic_placeholder"

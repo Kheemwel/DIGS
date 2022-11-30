@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--The background for menu item if checked-->
     <item android:drawable="@drawable/nav_item_bg_color"
           android:state_checked="true"/>
+    <!--The background for menu item if pressed-->
     <item android:drawable="@drawable/nav_item_bg_color"
           android:state_pressed="true"/>
+    <!--The background for menu item if focused/hover-->
     <item android:drawable="@drawable/nav_item_bg_color"
           android:state_focused="true"/>
+    <!--The background for menu item if selected-->
     <item android:drawable="@drawable/nav_item_bg_color"
           android:state_selected="true"/>
 </selector>

@@ -14,6 +14,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import com.google.android.material.navigation.NavigationView;
 
+//This is the java activity for main layout
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
@@ -23,9 +24,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //since this is the activity for main layout this code will display the layout.
         setContentView(R.layout.activity_main);
 
         toolbar = findViewById(R.id.toolbar);
+        //this will display the toolbar by supporting it
         setSupportActionBar(toolbar);
         actionBar = getSupportActionBar();
 
@@ -37,8 +40,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
+        //this will run if the save instancestate is null
         if (savedInstanceState == null) {
+            //this will change the content of the framelayout of the main activity layout
+            //the content of the frame layout can be change by fragments
+            //the frame layout will display the helpme fragment if the user start the app
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HelpMeFragment()).commit();
+            //set the helpme item in the navigation drawer selected
+            navigationView.setCheckedItem(R.id.nav_help);
+            //set the title of toolbar
             actionBar.setTitle("Help");
         }
     }
@@ -47,24 +57,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.nav_settings:
+                //if the settings item is selected in the navigation drawer, this will open the Settings Activity
                 startActivity(new Intent(this, SettingsActivity.class));
                 break;
             case R.id.nav_help:
+                //the content of the frame layout will display the help me fragment
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HelpMeFragment()).commit();
                 navigationView.setCheckedItem(R.id.nav_help);
                 actionBar.setTitle("Help");
                 break;
             case R.id.nav_wiki:
+                //the content of the frame layout will display the wiki fragment
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new WikiFragment()).commit();
                 navigationView.setCheckedItem(R.id.nav_wiki);
                 actionBar.setTitle("Wiki");
                 break;
             case R.id.nav_hotlines:
+                //the content of the frame layout will display the hotlines fragment
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HotlinesFragment()).commit();
                 navigationView.setCheckedItem(R.id.nav_hotlines);
                 actionBar.setTitle("Emergency Hotlines");
                 break;
             case R.id.nav_rescue:
+                //the content of the frame layout will display the rescue fragment
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new RescueFragment()).commit();
                 navigationView.setCheckedItem(R.id.nav_rescue);
                 actionBar.setTitle("Rescue Someone");
@@ -77,6 +92,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onBackPressed() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            //if the navigation drawer is open and the back button is pressed, it will close the drawer
             drawerLayout.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
