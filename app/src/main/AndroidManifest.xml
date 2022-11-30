@@ -9,9 +9,14 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/CustomTheme">
+
+<!--        Another activity. Just include all activity here-->
         <activity
                 android:name=".SettingsActivity">
         </activity>
+
+<!--        This is a comment-->
+<!--        This is the main activity, this is the first layout that user will see when they open the app -->
         <activity
                 android:name=".MainActivity"
                 android:exported="true">
