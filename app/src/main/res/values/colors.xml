@@ -15,4 +15,6 @@
     <color name="cyan_800">#00b388</color>
     <color name="custom_light">#57D5FD</color>
     <color name="custom_dark">#005773</color>
+    <color name="orange">#D06400</color>
+    <color name="gray">#5F636E</color>
 </resources>

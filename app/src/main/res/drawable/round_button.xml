@@ -1,21 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <!--The shape and color for button if not pressed-->
-    <item android:state_pressed="false">
+    <!--The shape and color for toggle button if not checked-->
+    <item android:state_checked="false">
         <shape android:shape="oval">
-            <solid android:color="#E1E1E1"/>
+            <solid android:color="@color/white"/>
         </shape>
     </item>
-    <!--The shape and color for button if pressed-->
-    <item android:state_pressed="true">
+    <!--The shape and color for toggle button if checked-->
+    <item android:state_checked="true">
         <shape android:shape="oval">
-            <solid android:color="#AFAFAF"/>
-        </shape>
-    </item>
-    <!--The shape and color for button if focused/hover-->
-    <item android:state_focused="true">
-        <shape android:shape="oval">
-            <solid android:color="#AFAFAF"/>
+            <solid android:color="#4B4B4B"/>
         </shape>
     </item>
 </selector>

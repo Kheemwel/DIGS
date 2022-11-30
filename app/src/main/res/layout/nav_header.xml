@@ -7,13 +7,13 @@
         android:layout_height="176dp"
         android:gravity="center"
         android:paddingTop="20dp"
-        android:background="@color/custom_dark">
+        android:background="@color/orange">
 
     <ImageView
             android:id="@+id/img_profile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/ic_launcher_round"/>
+            android:src="@drawable/gg_profile_white"/>
 
     <TextView
             android:id="@+id/text_username"
@@ -21,7 +21,8 @@
             android:layout_height="wrap_content"
             android:text="Kimwel Beller"
             android:textColor="@color/white"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:textSize="16sp"/>
     <TextView
             android:id="@+id/text_contactnumber"
             android:layout_width="wrap_content"

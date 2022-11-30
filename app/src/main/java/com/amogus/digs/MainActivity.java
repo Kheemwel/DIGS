@@ -1,14 +1,14 @@
 package com.amogus.digs;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -20,12 +20,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private NavigationView navigationView;
     private Toolbar toolbar;
     private ActionBar actionBar;
+    private Singleton singleton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //since this is the activity for main layout this code will display the layout.
         setContentView(R.layout.activity_main);
+
+        //getting the instance of the Singleton
+        singleton = Singleton.getInstance();
 
         toolbar = findViewById(R.id.toolbar);
         //this will display the toolbar by supporting it
@@ -58,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (item.getItemId()) {
             case R.id.nav_settings:
                 //if the settings item is selected in the navigation drawer, this will open the Settings Activity
-                startActivity(new Intent(this, SettingsActivity.class));
+                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
                 break;
             case R.id.nav_help:
                 //the content of the frame layout will display the help me fragment
@@ -87,6 +91,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        View navigation_header = navigationView.getHeaderView(0);
+
+        TextView txtName = navigation_header.findViewById(R.id.text_username);
+        TextView txtContact = navigation_header.findViewById(R.id.text_contactnumber);
+
+        txtName.setText(singleton.getUser_name());
+        txtContact.setText(singleton.getContact_number());
     }
 
     @Override

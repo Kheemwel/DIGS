@@ -1,7 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 <!--This is the theme of the app when dark mode is active-->
         <!-- Base application theme.-->
-    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/cyan_200</item>
         <item name="colorPrimaryVariant">@color/cyan_800</item>
@@ -15,7 +15,7 @@
         <!-- Customize your theme here. -->
     </style>
 <!--    Current theme used for dark mode-->
-    <style name="CustomTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="CustomTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/custom_light</item>
         <item name="colorPrimaryVariant">@color/custom_dark</item>
         <item name="colorOnPrimary">@color/white</item>

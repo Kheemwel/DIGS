@@ -6,10 +6,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".HelpMeFragment"
-        android:background="@drawable/gradient_background" android:layout_gravity="center_horizontal">
+        android:background="@drawable/gradient_background_orange"
+        android:layout_gravity="center_horizontal">
 
-    <Button
-            android:text="HELP ME"
+    <ToggleButton
+            android:textOn="HELP ME"
+            android:textOff="HELP ME"
             android:textSize="30sp"
             android:textColor="@color/black"
             android:layout_width="300dp"
@@ -18,7 +20,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:backgroundTint="@color/white"
             app:layout_constraintHorizontal_bias="0.497"
             android:layout_marginBottom="200dp"
             android:background="@drawable/round_button"/>

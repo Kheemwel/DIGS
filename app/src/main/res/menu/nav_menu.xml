@@ -6,25 +6,25 @@
 <!--This is the list of items that will be displayed in navigation drawer-->
     <item
             android:id="@+id/nav_settings"
-            android:icon="@drawable/ic_placeholder"
+            android:icon="@drawable/material_symbols_settings"
             android:title="@string/settings"/>
 
     <group android:checkableBehavior="single">
         <item
                 android:id="@+id/nav_help"
-                android:icon="@drawable/ic_placeholder"
+                android:icon="@drawable/material_symbols_add_alert"
                 android:title="@string/help_me"/>
         <item
                 android:id="@+id/nav_wiki"
-                android:icon="@drawable/ic_placeholder"
+                android:icon="@drawable/material_symbols_book"
                 android:title="@string/wiki"/>
         <item
                 android:id="@+id/nav_hotlines"
-                android:icon="@drawable/ic_placeholder"
+                android:icon="@drawable/material_symbols_call_gray"
                 android:title="@string/emergency_hotlines"/>
         <item
                 android:id="@+id/nav_rescue"
-                android:icon="@drawable/ic_placeholder"
+                android:icon="@drawable/mdi_swiss_cross_box"
                 android:title="@string/rescue_someone"/>
     </group>
 

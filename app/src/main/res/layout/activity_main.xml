@@ -23,7 +23,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:elevation="4dp"
-                android:background="@color/custom_light"
+                android:background="@color/orange"
                 android:minHeight="?android:attr/actionBarSize"/>
 
         <!--This is the frame layout which its content can be changed-->
@@ -42,9 +42,9 @@
             android:layout_gravity="start"
             app:headerLayout="@layout/nav_header"
             app:menu="@menu/nav_menu"
-            app:itemIconTint="@color/black"
-            app:itemTextColor="@color/black"
+            app:itemIconTint="@drawable/nav_item_color_state"
+            app:itemTextColor="@drawable/nav_item_color_state"
             app:itemBackground="@drawable/nav_item_highlight"
-            android:background="@color/custom_light"/>
+            android:background="@color/white"/>
 
 </androidx.drawerlayout.widget.DrawerLayout>

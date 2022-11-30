@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--The color for menu item if checked-->
+    <item android:color="@color/white"
+          android:state_checked="true"/>
+
+    <!--The color for menu item if pressed-->
+    <item android:color="@color/white"
+          android:state_pressed="true"/>
+
+    <!--The color for menu item if not pressed-->
+    <item android:color="@color/gray"
+          android:state_pressed="false"/>
+</selector>
