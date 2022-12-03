@@ -1,10 +1,17 @@
 package com.amogus.digs;
 
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Toast;
+import android.widget.ToggleButton;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -19,9 +26,6 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         //this will display the settings layout.
         setContentView(R.layout.activity_settings);
-
-        ConstraintLayout cl = findViewById(R.id.settings_container);
-        View view = cl.getViewById(0);
 
         //getting the instance of the Singleton
         singleton = Singleton.getInstance();

@@ -8,8 +8,9 @@
         tools:context=".RescueFragment"
         android:background="@drawable/gradient_background_orange">
 
-    <Button
-            android:text="SEARCH"
+    <ToggleButton
+            android:textOn="SEARCH"
+            android:textOff="SEARCH"
             android:textSize="30sp"
             android:textColor="@color/black"
             android:layout_width="300dp"
@@ -18,7 +19,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:backgroundTint="@color/white"
             app:layout_constraintHorizontal_bias="0.497"
             android:layout_marginBottom="200dp"
             android:background="@drawable/round_button"/>
