@@ -1,5 +1,0 @@
-//display the icon in the left side of the component
-android:drawableLeft="@drawable/name_of_icon_image"
-
-//display the icon in the right side of the component
-android:drawableLeft="@drawable/name_of_icon_image"

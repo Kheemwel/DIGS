@@ -6,7 +6,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".HotlinesFragment"
-        android:background="@drawable/gradient_background_orange">
+        android:background="@color/white">
+
     <EditText
             android:layout_width="342dp"
             android:layout_height="49dp"
@@ -14,6 +15,7 @@
             android:ems="10"
             android:id="@+id/editTextTextPersonName2"
             android:drawableRight="@drawable/ic_baseline_search"
+            android:background="@drawable/white_background_with_border"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -27,7 +29,7 @@
             android:orientation="vertical"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="#80FFFFFF"
+            android:background="@drawable/white_background_with_border"
             android:padding="20dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -45,7 +47,7 @@
                 android:textSize="24sp"
                 android:textColor="@color/black"
                 android:drawableRight="@drawable/material_symbols_call_black"
-                android:background="@color/white"
+                android:background="@drawable/white_background_with_border"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="20dp"
                 android:layout_width="match_parent"
@@ -57,7 +59,7 @@
                 android:textSize="24sp"
                 android:textColor="@color/black"
                 android:drawableRight="@drawable/material_symbols_call_black"
-                android:background="@color/white"
+                android:background="@drawable/white_background_with_border"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="20dp"
                 android:layout_width="match_parent"

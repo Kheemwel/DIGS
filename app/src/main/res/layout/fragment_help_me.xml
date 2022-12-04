@@ -6,11 +6,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".HelpMeFragment"
-        android:background="@drawable/gradient_background_orange"
+        android:background="@color/white"
         android:layout_gravity="center_horizontal">
 
     <ToggleButton
-            android:textOn="HELP ME"
+            android:textOn="STOP"
             android:textOff="HELP ME"
             android:textSize="30sp"
             android:textColor="@color/black"

@@ -6,10 +6,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".RescueFragment"
-        android:background="@drawable/gradient_background_orange">
+        android:background="@color/white">
 
     <ToggleButton
-            android:textOn="SEARCH"
+            android:textOn="STOP"
             android:textOff="SEARCH"
             android:textSize="30sp"
             android:textColor="@color/black"

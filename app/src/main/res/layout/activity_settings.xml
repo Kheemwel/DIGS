@@ -8,7 +8,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         tools:context=".SettingsActivity"
-        android:background="@drawable/gradient_background_orange">
+        android:background="@color/white">
 
     <!--This is the toolbar-->
     <androidx.appcompat.widget.Toolbar
@@ -17,6 +17,8 @@
             android:layout_height="56dp"
             android:elevation="4dp"
             android:background="@color/orange"
+            app:titleTextColor="@color/white"
+            app:title="Settings"
             android:minHeight="?android:attr/actionBarSize"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -39,7 +41,7 @@
             android:layout_marginBottom="20dp"
             android:layout_marginTop="20dp"
             app:layout_constraintVertical_bias="0.0"
-            android:background="#80FFFFFF">
+            android:background="@drawable/white_background_with_border">
 
         <ImageView
                 android:layout_width="75dp"
@@ -100,7 +102,8 @@
                 android:layout_marginRight="20dp"
                 android:layout_marginEnd="20dp"
                 app:layout_constraintTop_toBottomOf="@+id/textView"
-                android:layout_marginTop="50dp"/>
+                android:layout_marginTop="50dp"
+                android:background="@drawable/white_background_with_border"/>
         <EditText
                 android:layout_width="142dp"
                 android:layout_height="40dp"
@@ -115,7 +118,8 @@
                 android:layout_marginRight="20dp"
                 android:layout_marginEnd="20dp"
                 app:layout_constraintHorizontal_bias="1.0"
-                android:layout_marginTop="32dp"/>
+                android:layout_marginTop="32dp"
+                android:background="@drawable/white_background_with_border"/>
         <TextView
                 android:text="Access Your Location"
                 android:textSize="18sp"

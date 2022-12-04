@@ -1,15 +1,21 @@
 package com.amogus.digs;
 
+import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.ToggleButton;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 //this is the java fragment for helpme fragment
@@ -18,6 +24,7 @@ public class HelpMeFragment extends Fragment {
     private AudioManager audioManager;
     private BluetoothAdapter bluetoothAdapter;
     private ToggleButton btnHelp;
+    private Intent bluetooth;
 
     private int origionalVolume = 0;
 
@@ -49,7 +56,7 @@ public class HelpMeFragment extends Fragment {
 
                     //open bluetooth if disabled
                     if (!bluetoothAdapter.isEnabled()) {
-                        bluetoothAdapter.enable();
+                        turnOnBluetooth(true);
                     }
 
                 } else {
@@ -62,7 +69,7 @@ public class HelpMeFragment extends Fragment {
 
                     //close bluetooth if enabled
                     if (bluetoothAdapter.isEnabled()) {
-                        bluetoothAdapter.disable();
+                        turnOnBluetooth(false);
                     }
 
                 }
@@ -70,6 +77,26 @@ public class HelpMeFragment extends Fragment {
         });
 
         return view;
+    }
+
+    private void turnOnBluetooth(boolean yes) {
+        if (yes) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for ActivityCompat#requestPermissions for more details.
+                    return;
+                }
+            }
+            bluetoothAdapter.enable();
+        } else {
+            bluetoothAdapter.disable();
+        }
     }
 
     //this is called when the activity is stopped (ex: exiting the app/activity/layout)

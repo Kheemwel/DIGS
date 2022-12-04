@@ -38,8 +38,6 @@ public class SettingsActivity extends AppCompatActivity {
         //this two line of code will display the back button on the toolbar
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowHomeEnabled(true);
-        //set the title of toolbar
-        actionBar.setTitle("Settings");
 
         EditText inputName = findViewById(R.id.editTextUserName);
         EditText inputContact  = findViewById(R.id.editTextContactNumber);
