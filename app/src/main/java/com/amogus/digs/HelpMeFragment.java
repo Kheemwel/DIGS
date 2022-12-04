@@ -18,10 +18,8 @@ public class HelpMeFragment extends Fragment {
     private AudioManager audioManager;
     private BluetoothAdapter bluetoothAdapter;
     private ToggleButton btnHelp;
-    private WifiHotspotManager hotspot;
 
     private int origionalVolume = 0;
-    private String TAG = "MainActivity";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -33,8 +31,6 @@ public class HelpMeFragment extends Fragment {
         mediaPlayer = MediaPlayer.create(getActivity(), R.raw.original_nokia);
         audioManager = (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        //hotspot = new WifiHotspotManager(getActivity().getApplicationContext());
-        //hotspot.showWritePermissionSettings(true);
 
         //get the device's original volume when the app is launched
         origionalVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
@@ -56,10 +52,6 @@ public class HelpMeFragment extends Fragment {
                         bluetoothAdapter.enable();
                     }
 
-//                    //turn on hotspot if close
-//                    if (!hotspot.isWifiHotspotOn()) {
-//                        boolean on = hotspot.turnWifiHotspotOn();
-//                    }
                 } else {
                     if (mediaPlayer.isPlaying()) {
                         mediaPlayer.stop();
@@ -73,10 +65,6 @@ public class HelpMeFragment extends Fragment {
                         bluetoothAdapter.disable();
                     }
 
-//                    //turn off hotspot if open
-//                    if (hotspot.isWifiHotspotOn()) {
-//                        boolean off = hotspot.turnWifiHotspotOff();
-//                    }
                 }
             }
         });
