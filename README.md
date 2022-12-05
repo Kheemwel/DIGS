@@ -1,4 +1,4 @@
-# DIGS
+# DIGS (Disaster Information Guide for Survival)
 <!--- comment --->
 Project namin para sa Application Development and Emerging Technologies<br/> <br/>
 
