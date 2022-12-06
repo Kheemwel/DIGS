@@ -28,7 +28,7 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
 
         //getting the instance of the Singleton
-        singleton = Singleton.getInstance();
+        singleton = Singleton.getInstance(getApplicationContext());
 
         Toolbar toolbar = findViewById(R.id.toolbar_settings);
         //this will display the toolbar

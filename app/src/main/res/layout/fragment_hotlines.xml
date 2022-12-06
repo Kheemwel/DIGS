@@ -9,8 +9,8 @@
         android:background="@color/white">
 
     <EditText
-            android:layout_width="342dp"
-            android:layout_height="49dp"
+            android:layout_width="365dp"
+            android:layout_height="47dp"
             android:inputType="textPersonName"
             android:ems="10"
             android:id="@+id/editTextTextPersonName2"
@@ -35,12 +35,12 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName2"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="40dp"
-            android:layout_marginLeft="40dp"
-            android:layout_marginStart="40dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
-            android:layout_marginRight="40dp"
-            android:layout_marginEnd="40dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginEnd="20dp"
             app:layout_constraintVertical_bias="0.526">
         <TextView
                 android:text="911"

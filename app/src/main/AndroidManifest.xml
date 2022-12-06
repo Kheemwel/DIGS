@@ -18,14 +18,16 @@
 
 <!--        Another activity. Just include all activity here-->
         <activity
-                android:name=".SettingsActivity">
+                android:name=".SettingsActivity"
+                android:screenOrientation="portrait">
         </activity>
 
 <!--        This is a comment-->
 <!--        This is the main activity, this is the first layout that user will see when they open the app -->
         <activity
                 android:name=".MainActivity"
-                android:exported="true">
+                android:exported="true"
+                android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

@@ -14,6 +14,8 @@ public class HotlinesFragment extends Fragment {
         // Inflate the layout for this fragment
         //once this java fragment is called, it will display the hotlines fragment to the fragment container
         //which is the frame layout
-        return inflater.inflate(R.layout.fragment_hotlines, container, false);
+        View view = inflater.inflate(R.layout.fragment_hotlines, container, false);
+
+        return view;
     }
 }
