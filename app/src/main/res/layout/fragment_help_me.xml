@@ -13,15 +13,16 @@
             android:textOn="STOP"
             android:textOff="HELP ME"
             android:textSize="30sp"
-            android:textColor="@color/black"
-            android:layout_width="300dp"
-            android:layout_height="300dp"
+            android:textColor="@color/white"
+            android:layout_width="400dp"
+            android:layout_height="400dp"
             android:id="@+id/btn_help"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.497"
-            android:layout_marginBottom="200dp"
-            android:background="@drawable/round_button"/>
+            android:layout_marginBottom="150dp"
+            android:background="@drawable/glossy_button" android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp" android:layout_marginRight="20dp" android:layout_marginEnd="20dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

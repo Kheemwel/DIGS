@@ -133,7 +133,8 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="115dp"/>
         <Switch
-                android:text="Off"
+                android:textOff="Disabled"
+                android:textOn="Enabled"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/switch1"

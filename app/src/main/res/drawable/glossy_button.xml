@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--The image for toggle button if not checked-->
+    <item
+            android:state_checked="false"
+            android:drawable="@drawable/red_glossy_button_off"/>
+
+    <!--The image for toggle button if checked-->
+    <item
+            android:state_checked="true"
+            android:drawable="@drawable/red_glossy_button_on"/>
+</selector>
