@@ -14,9 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.ToggleButton;
-import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 //this is the java fragment for helpme fragment
@@ -25,7 +23,6 @@ public class HelpMeFragment extends Fragment {
     private AudioManager audioManager;
     private BluetoothAdapter bluetoothAdapter;
     private ToggleButton btnHelp;
-    private Intent bluetooth;
 
     private int origionalVolume = 0;
     public static final String[] BLUETOOTH_PERMISSIONS_S = { Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH_CONNECT};
@@ -84,6 +81,7 @@ public class HelpMeFragment extends Fragment {
     private void turnOnBluetooth(boolean yes) {
         if (yes) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                //will ask permission if the device android version is 12 and above
                 if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
                     // TODO: Consider calling
                     //    ActivityCompat#requestPermissions
