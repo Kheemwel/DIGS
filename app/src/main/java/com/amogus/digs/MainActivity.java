@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -21,6 +22,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Toolbar toolbar;
     private ActionBar actionBar;
     private Singleton singleton;
+    private static final String imageName = "profile_pic.png";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,9 +103,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         TextView txtName = navigation_header.findViewById(R.id.text_username);
         TextView txtContact = navigation_header.findViewById(R.id.text_contactnumber);
+        ImageView profilePic = navigation_header.findViewById(R.id.imgNavProfile);
 
+        //get the saved username from shared preference and set it to the textview
         txtName.setText(singleton.getUser_name());
+        //get the saved contact from shared preference and set it to the textview
         txtContact.setText(singleton.getContact_number());
+        //get the saved image from internal storage and set it to the image view
+        profilePic.setImageDrawable(singleton.getImage(imageName));
     }
 
     @Override

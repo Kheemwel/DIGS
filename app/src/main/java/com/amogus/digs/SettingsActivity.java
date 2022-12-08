@@ -1,25 +1,27 @@
 package com.amogus.digs;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.widget.CompoundButton;
-import android.widget.EditText;
-import android.widget.Toast;
-import android.widget.ToggleButton;
+import android.widget.*;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.constraintlayout.widget.ConstraintLayout;
+
+import java.io.*;
 
 //This is the java activity for settings layout
 public class SettingsActivity extends AppCompatActivity {
     private Singleton singleton;
+    private ImageView profilePic;
+    private static final int SELECT = 100;
+    private static final String imageName = "profile_pic.png";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         EditText inputName = findViewById(R.id.editTextUserName);
         EditText inputContact  = findViewById(R.id.editTextContactNumber);
+        profilePic = findViewById(R.id.imgProfile);
 
         inputName.addTextChangedListener(new TextWatcher() {
             @Override
@@ -76,8 +79,55 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
+        //get the saved username from shared preference and set it to the edittext
         inputName.setText(singleton.getUser_name());
+        //get the saved contact from shared preference and set it to the edittext
         inputContact.setText(singleton.getContact_number());
+        //get the saved image from internal storage and set it to the image view
+        profilePic.setImageDrawable(singleton.getImage(imageName));
+
+        profilePic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setType("image/*");
+                startActivityForResult(intent, SELECT);
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == SELECT && resultCode == RESULT_OK) {
+            //get the selected image from gallery
+            Uri select = data.getData();
+            InputStream inputStream = null;
+
+            try {
+                assert select != null;
+                inputStream = getContentResolver().openInputStream(select);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+
+            //convert the uri image to bitmap
+            Bitmap image = BitmapFactory.decodeStream(inputStream);
+            File pictureFile = new File(getFilesDir(), imageName);
+            try {
+                //save the selected image to the internal storage (data/data/package/files/)
+                FileOutputStream fos = new FileOutputStream(pictureFile);
+                image.compress(Bitmap.CompressFormat.PNG, 90, fos);
+                fos.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            //get the saved image from internal storage and set it to the image view
+            profilePic.setImageDrawable(singleton.getImage(imageName));
+        }
     }
 
     @Override

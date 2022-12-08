@@ -1,17 +1,25 @@
 package com.amogus.digs;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
+
+import java.io.File;
 
 //used for storing methods and variables that can be shared to other classes
 public class Singleton {
-    SharedPreferences preferences;
-    SharedPreferences.Editor editor;
+    private SharedPreferences preferences;
+    private SharedPreferences.Editor editor;
+
+    private static Context applicationContext;
 
     private static Singleton instance;
 
     private Singleton(Context applicationContext) {
-        preferences = applicationContext.getSharedPreferences("digs_preferences", Context.MODE_PRIVATE);
+        Singleton.applicationContext = applicationContext;
+        preferences = Singleton.applicationContext.getSharedPreferences("digs_preferences", Context.MODE_PRIVATE);
         editor = preferences.edit();
     }
 
@@ -20,6 +28,11 @@ public class Singleton {
             instance = new Singleton(applicationContext);
         }
         return instance;
+    }
+
+
+    public SharedPreferences.Editor getEditor() {
+        return editor;
     }
 
     public String getUser_name() {
@@ -38,5 +51,19 @@ public class Singleton {
     public void setContact_number(String contact_number) {
         editor.putString("Contact Number", contact_number);
         editor.commit();
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    public Drawable getImage(String imageName) {
+        File file = new File(applicationContext.getFilesDir(), imageName);
+        Drawable image = null;
+        if (file.exists()) {
+            image = Drawable.createFromPath(file.toString());
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                image = applicationContext.getDrawable(R.drawable.gg_profile_black);
+            }
+        }
+        return image;
     }
 }

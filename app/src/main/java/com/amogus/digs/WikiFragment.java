@@ -18,7 +18,7 @@ import java.util.Arrays;
 
 //this is the java fragment for wiki fragment
 public class WikiFragment extends Fragment {
-    private String TAG = "WikiFragment";
+    private static final String TAG = "WikiFragment";
     private PDFView pdfView;
 
     @Override

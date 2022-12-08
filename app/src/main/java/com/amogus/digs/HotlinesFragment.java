@@ -5,13 +5,15 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
-import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
@@ -34,7 +36,7 @@ public class HotlinesFragment extends Fragment {
 
         readCSV();
 
-        SearchView searchView = view.findViewById(R.id.searchView);
+        EditText searchText = view.findViewById(R.id.searchText);
         ListView listView = view.findViewById(R.id.listView);
 
         //get the resource for the view of adapter view
@@ -57,17 +59,22 @@ public class HotlinesFragment extends Fragment {
             }
         });
 
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        searchText.addTextChangedListener(new TextWatcher() {
             @Override
-            public boolean onQueryTextSubmit(String query) {
-                arrayAdapter.getFilter().filter(query);
-                return false;
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
             }
 
             @Override
-            public boolean onQueryTextChange(String newText) {
-                arrayAdapter.getFilter().filter(newText);
-                return false;
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //filter the listview while typing
+                arrayAdapter.getFilter().filter(s);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                //filter the listview after typing
+                arrayAdapter.getFilter().filter(s);
             }
         });
 
@@ -84,7 +91,9 @@ public class HotlinesFragment extends Fragment {
             String csvLine;
             while ((csvLine = reader.readLine()) != null) {
                 String[] row = csvLine.split(",");
+                //get the first text that is before comma
                 contactNames.add(row[0]);
+                //get the second text that is after the comma
                 contactNumbers.add(row[1]);
             }
         }
