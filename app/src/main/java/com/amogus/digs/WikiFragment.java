@@ -28,7 +28,7 @@ public class WikiFragment extends Fragment {
         //which is the frame layout
         View view = inflater.inflate(R.layout.fragment_wiki, container, false);
 
-        ArrayList<String> list = new ArrayList<>();
+        ArrayList<String> list = new ArrayList<String>();
         String[] arr;
         try {
             //get all the file names inside the assets/wiki folder
