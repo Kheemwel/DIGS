@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
+import android.location.LocationManager;
 import android.os.Build;
 
 import java.io.File;
@@ -65,5 +66,11 @@ public class Singleton {
             }
         }
         return image;
+    }
+
+    public boolean getGPSStatus() {
+        LocationManager locationManager = (LocationManager)applicationContext.getSystemService(Context.LOCATION_SERVICE);
+        assert locationManager != null;
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
 }

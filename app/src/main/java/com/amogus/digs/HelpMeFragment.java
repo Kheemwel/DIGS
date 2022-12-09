@@ -1,6 +1,7 @@
 package com.amogus.digs;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
@@ -25,7 +26,7 @@ public class HelpMeFragment extends Fragment {
     private ToggleButton btnHelp;
 
     private int origionalVolume = 0;
-    public static final String[] BLUETOOTH_PERMISSIONS_S = { Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH_CONNECT};
+    private static final String[] BLUETOOTH_PERMISSIONS_S = { Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH_CONNECT};
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -81,17 +82,24 @@ public class HelpMeFragment extends Fragment {
     private void turnOnBluetooth(boolean yes) {
         if (yes) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                //will ask permission if the device android version is 12 and above
-                if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
-                    ActivityCompat.requestPermissions(getActivity(), BLUETOOTH_PERMISSIONS_S, 2);
-                    return;
-                }
+                new AlertDialog.Builder(getActivity())
+                        .setTitle("Bluetooth Permission")
+                        .setMessage("Bluetooth is required for this app to work and access your location. Please enable Bluetooth")
+                        .setPositiveButton("Yes", ((dialog, which) -> {
+                            //will ask permission if the device android version is 12 and above
+                            if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                                // TODO: Consider calling
+                                //    ActivityCompat#requestPermissions
+                                // here to request the missing permissions, and then overriding
+                                //   public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)
+                                // to handle the case where the user grants the permission. See the documentation
+                                // for ActivityCompat#requestPermissions for more details.
+                                ActivityCompat.requestPermissions(getActivity(), BLUETOOTH_PERMISSIONS_S, 2);
+                                return;
+                            }
+                        }))
+                        .setCancelable(false)
+                        .show();
             }
             bluetoothAdapter.enable();
         } else {

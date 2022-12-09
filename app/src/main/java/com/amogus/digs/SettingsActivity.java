@@ -1,18 +1,27 @@
 package com.amogus.digs;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.widget.*;
+import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Switch;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 
 import java.io.*;
 
@@ -20,8 +29,10 @@ import java.io.*;
 public class SettingsActivity extends AppCompatActivity {
     private Singleton singleton;
     private ImageView profilePic;
+    private SwitchCompat gpsSwitch;
     private static final int SELECT = 100;
     private static final String imageName = "profile_pic.png";
+    private static final String[] LOCATION_PERMISSIONS = { Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +55,7 @@ public class SettingsActivity extends AppCompatActivity {
         EditText inputName = findViewById(R.id.editTextUserName);
         EditText inputContact  = findViewById(R.id.editTextContactNumber);
         profilePic = findViewById(R.id.imgProfile);
+        gpsSwitch = findViewById(R.id.gps_switch);
 
         inputName.addTextChangedListener(new TextWatcher() {
             @Override
@@ -94,6 +106,24 @@ public class SettingsActivity extends AppCompatActivity {
                 startActivityForResult(intent, SELECT);
             }
         });
+
+        gpsSwitch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent gps = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivity(gps);
+            }
+        });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (singleton.getGPSStatus()) {
+            gpsSwitch.setChecked(true);
+        } else {
+            gpsSwitch.setChecked(false);
+        }
     }
 
     @Override
