@@ -1,7 +1,9 @@
 package com.amogus.digs;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -31,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
 
         //getting the instance of the Singleton
-        singleton = Singleton.getInstance(MainActivity.this);
+        singleton = Singleton.getInstance(this);
 
         toolbar = findViewById(R.id.toolbar);
         //this will display the toolbar by supporting it
@@ -56,6 +58,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             navigationView.setCheckedItem(R.id.nav_help);
             //set the title of toolbar
             actionBar.setTitle("Help");
+        }
+
+        if (!singleton.isGPS_Enabled()) {
+            new AlertDialog.Builder(this)
+                    .setTitle("Location Permission Needed")
+                    .setMessage("Location Access is required. Please enabled Location Access in the Settings")
+                    .setCancelable(false)
+                    .setPositiveButton("Yes", ((dialog, which) -> {
+                        //will open the location access settings
+                        startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    }))
+                    .show();
         }
     }
 

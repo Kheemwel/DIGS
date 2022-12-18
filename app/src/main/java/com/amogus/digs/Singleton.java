@@ -8,6 +8,7 @@ import android.location.LocationManager;
 import android.os.Build;
 
 import java.io.File;
+import java.util.UUID;
 
 //used for storing methods and variables that can be shared to other classes
 public class Singleton {
@@ -15,6 +16,8 @@ public class Singleton {
     private SharedPreferences.Editor editor;
     private static Context activityContext;
     private static Singleton instance;
+
+    private final UUID App_UUID = UUID.fromString("16ac2bc2-82ce-11ed-a1eb-0242ac120002");
 
     private Singleton(Context activityContext) {
         Singleton.activityContext = activityContext;
@@ -66,9 +69,13 @@ public class Singleton {
         return image;
     }
 
-    public boolean getGPSStatus() {
+    public boolean isGPS_Enabled() {
         LocationManager locationManager = (LocationManager)activityContext.getSystemService(Context.LOCATION_SERVICE);
         assert locationManager != null;
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+    }
+
+    public UUID getThisAppUUID() {
+        return App_UUID;
     }
 }

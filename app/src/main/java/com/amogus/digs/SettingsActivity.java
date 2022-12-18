@@ -41,7 +41,7 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
 
         //getting the instance of the Singleton
-        singleton = Singleton.getInstance(SettingsActivity.this);
+        singleton = Singleton.getInstance(this);
 
         Toolbar toolbar = findViewById(R.id.toolbar_settings);
         //this will display the toolbar
@@ -127,7 +127,7 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if (singleton.getGPSStatus()) {
+        if (singleton.isGPS_Enabled()) {
             gpsSwitch.setChecked(true);
         } else {
             gpsSwitch.setChecked(false);
