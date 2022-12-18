@@ -14,19 +14,19 @@ public class Singleton {
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
 
-    private static Context applicationContext;
+    private static Context activityContext;
 
     private static Singleton instance;
 
-    private Singleton(Context applicationContext) {
-        Singleton.applicationContext = applicationContext;
-        preferences = Singleton.applicationContext.getSharedPreferences("digs_preferences", Context.MODE_PRIVATE);
+    private Singleton(Context activityContext) {
+        Singleton.activityContext = activityContext;
+        preferences = Singleton.activityContext.getSharedPreferences("digs_preferences", Context.MODE_PRIVATE);
         editor = preferences.edit();
     }
 
-    public static Singleton getInstance(Context applicationContext) {
+    public static Singleton getInstance(Context activityContext) {
         if (instance == null) {
-            instance = new Singleton(applicationContext);
+            instance = new Singleton(activityContext);
         }
         return instance;
     }
@@ -56,20 +56,20 @@ public class Singleton {
 
     @SuppressLint("UseCompatLoadingForDrawables")
     public Drawable getImage(String imageName) {
-        File file = new File(applicationContext.getFilesDir(), imageName);
+        File file = new File(activityContext.getFilesDir(), imageName);
         Drawable image = null;
         if (file.exists()) {
             image = Drawable.createFromPath(file.toString());
         } else {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                image = applicationContext.getDrawable(R.drawable.gg_profile_black);
+                image = activityContext.getDrawable(R.drawable.gg_profile_black);
             }
         }
         return image;
     }
 
     public boolean getGPSStatus() {
-        LocationManager locationManager = (LocationManager)applicationContext.getSystemService(Context.LOCATION_SERVICE);
+        LocationManager locationManager = (LocationManager)activityContext.getSystemService(Context.LOCATION_SERVICE);
         assert locationManager != null;
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
     }

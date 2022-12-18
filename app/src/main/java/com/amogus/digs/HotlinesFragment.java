@@ -37,7 +37,7 @@ public class HotlinesFragment extends Fragment {
         readCSV();
 
         EditText searchText = view.findViewById(R.id.searchText);
-        ListView listView = view.findViewById(R.id.listView);
+        ListView listView = view.findViewById(R.id.list_hotlines);
 
         //get the resource for the view of adapter view
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(), R.layout.listview_item, contactNames);

@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
 
         //getting the instance of the Singleton
-        singleton = Singleton.getInstance(getApplicationContext());
+        singleton = Singleton.getInstance(MainActivity.this);
 
         toolbar = findViewById(R.id.toolbar);
         //this will display the toolbar by supporting it

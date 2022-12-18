@@ -11,10 +11,10 @@
     <ToggleButton
             android:textOn="STOP"
             android:textOff="SEARCH"
-            android:textSize="40sp"
+            android:textSize="20sp"
             android:textColor="@color/white"
-            android:layout_width="400dp"
-            android:layout_height="400dp"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
             android:id="@+id/btn_search"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -26,5 +26,21 @@
             android:layout_marginStart="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginEnd="20dp"/>
+
+    <ListView
+            android:id="@+id/list_bluetooths"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginBottom="100dp"
+            app:layout_constraintBottom_toTopOf="@+id/btn_search"
+            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/white_background_with_border"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

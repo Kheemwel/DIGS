@@ -41,7 +41,7 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
 
         //getting the instance of the Singleton
-        singleton = Singleton.getInstance(getApplicationContext());
+        singleton = Singleton.getInstance(SettingsActivity.this);
 
         Toolbar toolbar = findViewById(R.id.toolbar_settings);
         //this will display the toolbar
@@ -110,8 +110,18 @@ public class SettingsActivity extends AppCompatActivity {
         gpsSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent gps = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                startActivity(gps);
+//                Intent gps = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+//                startActivity(gps);
+                if (ActivityCompat.checkSelfPermission(SettingsActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for ActivityCompat#requestPermissions for more details.
+                    ActivityCompat.requestPermissions(SettingsActivity.this, LOCATION_PERMISSIONS, 2);
+                    return;
+                }
             }
         });
     }

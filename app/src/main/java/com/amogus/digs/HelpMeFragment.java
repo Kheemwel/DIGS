@@ -48,16 +48,17 @@ public class HelpMeFragment extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     //set the volume to max
-                    audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
+                    //audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
 
                     //set the audio to play in loop
                     mediaPlayer.setLooping(true);
                     mediaPlayer.start();
 
-                    //open bluetooth if disabled
+                    //open bluetooth if bluetooth is diabled
                     if (!bluetoothAdapter.isEnabled()) {
                         turnOnBluetooth(true);
                     }
+
 
                 } else {
                     if (mediaPlayer.isPlaying()) {
@@ -67,11 +68,8 @@ public class HelpMeFragment extends Fragment {
                         mediaPlayer.prepareAsync();
                     }
 
-                    //close bluetooth if enabled
-                    if (bluetoothAdapter.isEnabled()) {
-                        turnOnBluetooth(false);
-                    }
-
+                    //close bluetooth
+                    turnOnBluetooth(false);
                 }
             }
         });
@@ -84,7 +82,8 @@ public class HelpMeFragment extends Fragment {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 new AlertDialog.Builder(getActivity())
                         .setTitle("Bluetooth Permission")
-                        .setMessage("Bluetooth is required for this app to work and access your location. Please enable Bluetooth")
+                        .setMessage("Bluetooth is required for this app to work. Please enable Bluetooth")
+                        .setCancelable(false)
                         .setPositiveButton("Yes", ((dialog, which) -> {
                             //will ask permission if the device android version is 12 and above
                             if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
@@ -97,11 +96,12 @@ public class HelpMeFragment extends Fragment {
                                 ActivityCompat.requestPermissions(getActivity(), BLUETOOTH_PERMISSIONS_S, 2);
                                 return;
                             }
+                            bluetoothAdapter.enable();
                         }))
-                        .setCancelable(false)
                         .show();
+            } else {
+                bluetoothAdapter.enable();
             }
-            bluetoothAdapter.enable();
         } else {
             bluetoothAdapter.disable();
         }
