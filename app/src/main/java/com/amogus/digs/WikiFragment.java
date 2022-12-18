@@ -76,7 +76,7 @@ public class WikiFragment extends Fragment {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
+                //
             }
         });
 

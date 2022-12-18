@@ -67,56 +67,38 @@ public class RescueFragment extends Fragment {
 
     private void turnOnBluetooth(boolean yes) {
         if (yes) {
-//            new AlertDialog.Builder(getActivity())
-//                    .setTitle("Bluetooth Permission")
-//                    .setMessage("Bluetooth is required for this app to work. Please enable Bluetooth")
-//                    .setCancelable(false)
-//                    .setPositiveButton("Yes", ((dialog, which) -> {
-//                        //will ask permission if the device android version is 12 and above
-//                        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.BLUETOOTH_ADMIN) != PackageManager.PERMISSION_GRANTED) {
-//                            // TODO: Consider calling
-//                            //    ActivityCompat#requestPermissions
-//                            // here to request the missing permissions, and then overriding
-//                            //   public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)
-//                            // to handle the case where the user grants the permission. See the documentation
-//                            // for ActivityCompat#requestPermissions for more details.
-//                            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.BLUETOOTH_ADMIN}, 3);
-//                            return;
-//                        }
-//                        bluetoothAdapter.enable();
-//                        if (checkCoarseLocationPermission()) {
-//                            arrayList.clear();
-//                            arrayAdapter.notifyDataSetChanged();
-//                            getActivity().registerReceiver(broadcastReceiver, new IntentFilter(BluetoothDevice.ACTION_FOUND));
-//                            bluetoothAdapter.startDiscovery();
-//
-//                            Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
-//                            for (BluetoothDevice bluetoothDevice : pairedDevices) {
-//                                arrayList.add(bluetoothDevice.getName());
-//                                System.out.println(bluetoothDevice.getName());
-//                            }
-//                            arrayAdapter.notifyDataSetChanged();
-//                        }
-//                    }))
-//                    .show();
-            Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
-            intent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 30);
-            startActivityForResult(intent, 1);
-            if (checkCoarseLocationPermission()) {
-                arrayList.clear();
-                arrayAdapter.notifyDataSetChanged();
-                getActivity().registerReceiver(broadcastReceiver, new IntentFilter(BluetoothDevice.ACTION_FOUND));
-                bluetoothAdapter.startDiscovery();
-                System.out.println("Bluetooth is Discovering: " + bluetoothAdapter.isDiscovering());
+            new AlertDialog.Builder(getActivity())
+                    .setTitle("Bluetooth Permission")
+                    .setMessage("Bluetooth is required for this app to work. Please enable Bluetooth")
+                    .setCancelable(false)
+                    .setPositiveButton("Yes", ((dialog, which) -> {
+                        //will ask permission if the device android version is 12 and above
+                        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.BLUETOOTH_ADMIN) != PackageManager.PERMISSION_GRANTED) {
+                            // TODO: Consider calling
+                            //    ActivityCompat#requestPermissions
+                            // here to request the missing permissions, and then overriding
+                            //   public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)
+                            // to handle the case where the user grants the permission. See the documentation
+                            // for ActivityCompat#requestPermissions for more details.
+                            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.BLUETOOTH_ADMIN}, 3);
+                            return;
+                        }
+                        bluetoothAdapter.enable();
+                        if (checkCoarseLocationPermission()) {
+                            arrayList.clear();
+                            arrayAdapter.notifyDataSetChanged();
+                            getActivity().registerReceiver(broadcastReceiver, new IntentFilter(BluetoothDevice.ACTION_FOUND));
+                            bluetoothAdapter.startDiscovery();
 
-                Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
-                System.out.println("PairedDevices: " + pairedDevices.isEmpty());
-                for (BluetoothDevice bluetoothDevice : pairedDevices) {
-                    arrayList.add(bluetoothDevice.getName());
-                    System.out.println(bluetoothDevice.getName());
-                }
-                arrayAdapter.notifyDataSetChanged();
-            }
+                            Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
+                            for (BluetoothDevice bluetoothDevice : pairedDevices) {
+                                arrayList.add(bluetoothDevice.getName());
+                                System.out.println(bluetoothDevice.getName());
+                            }
+                            arrayAdapter.notifyDataSetChanged();
+                        }
+                    }))
+                    .show();
         } else {
             //getActivity().unregisterReceiver(broadcastReceiver);
             bluetoothAdapter.cancelDiscovery();

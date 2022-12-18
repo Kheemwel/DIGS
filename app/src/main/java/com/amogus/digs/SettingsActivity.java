@@ -110,8 +110,6 @@ public class SettingsActivity extends AppCompatActivity {
         gpsSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent gps = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-//                startActivity(gps);
                 if (ActivityCompat.checkSelfPermission(SettingsActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     // TODO: Consider calling
                     //    ActivityCompat#requestPermissions

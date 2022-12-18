@@ -13,9 +13,7 @@ import java.io.File;
 public class Singleton {
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
-
     private static Context activityContext;
-
     private static Singleton instance;
 
     private Singleton(Context activityContext) {
