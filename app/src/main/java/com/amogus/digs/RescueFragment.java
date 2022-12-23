@@ -1,7 +1,9 @@
 package com.amogus.digs;
 
+import android.Manifest;
 import android.Manifest.permission;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
@@ -9,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,6 +36,8 @@ public class RescueFragment extends Fragment {
     private ToggleButton btnSearch;
     private BluetoothAdapter bluetoothAdapter;
     private ArrayAdapter<String> arrayAdapter;
+    private boolean isBroadcastReceiverRegistered = false;
+    private static final String[] BLUETOOTH_PERMISSIONS_S = {Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH_CONNECT};
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -54,14 +59,14 @@ public class RescueFragment extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     if (!bluetoothAdapter.isEnabled()) {
-                        startActivityForResult(new Intent(ACTION_REQUEST_ENABLE), 1);
+                        turnOnBluetooth(true);
                     }
                 } else {
                     if (bluetoothAdapter.isDiscovering()) {
                         bluetoothAdapter.cancelDiscovery();
                     }
-                    getActivity().unregisterReceiver(broadcastReceiver);
-                    bluetoothAdapter.disable();
+                    unregisterBroadcastReceiver();
+                    turnOnBluetooth(false);
                     arrayAdapter.clear();
                     arrayAdapter.notifyDataSetChanged();
                 }
@@ -75,8 +80,53 @@ public class RescueFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        getActivity().registerReceiver(broadcastReceiver, new IntentFilter(BluetoothDevice.ACTION_FOUND));
+        registerBroadcastReceiver();
         bluetoothAdapter.startDiscovery();
+    }
+
+    private void turnOnBluetooth(boolean yes) {
+        if (yes) {
+            Intent openBluetooth = new Intent(ACTION_REQUEST_ENABLE);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                new AlertDialog.Builder(getActivity())
+                        .setTitle("Bluetooth Permission")
+                        .setMessage("Bluetooth is required for this device discoverability. Please enable Bluetooth")
+                        .setCancelable(false)
+                        .setPositiveButton("Yes", ((dialog, which) -> {
+                            //will ask permission if the device android version is 12 and above
+                            if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                                // TODO: Consider calling
+                                //    ActivityCompat#requestPermissions
+                                // here to request the missing permissions, and then overriding
+                                //   public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)
+                                // to handle the case where the user grants the permission. See the documentation
+                                // for ActivityCompat#requestPermissions for more details.
+                                ActivityCompat.requestPermissions(getActivity(), BLUETOOTH_PERMISSIONS_S, 2);
+                                return;
+                            }
+                            startActivityForResult(openBluetooth, 1);
+                        }))
+                        .show();
+            } else {
+                startActivityForResult(openBluetooth, 1);
+            }
+        } else {
+            bluetoothAdapter.disable();
+        }
+    }
+
+    private void registerBroadcastReceiver() {
+        if (!isBroadcastReceiverRegistered) {
+            getActivity().registerReceiver(broadcastReceiver, new IntentFilter(BluetoothDevice.ACTION_FOUND));
+            isBroadcastReceiverRegistered = true;
+        }
+    }
+
+    private void unregisterBroadcastReceiver() {
+        if (isBroadcastReceiverRegistered) {
+            getActivity().registerReceiver(broadcastReceiver, new IntentFilter(BluetoothDevice.ACTION_FOUND));
+            isBroadcastReceiverRegistered = false;
+        }
     }
 
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
@@ -124,6 +174,6 @@ public class RescueFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        getActivity().unregisterReceiver(broadcastReceiver);
+        unregisterBroadcastReceiver();
     }
 }

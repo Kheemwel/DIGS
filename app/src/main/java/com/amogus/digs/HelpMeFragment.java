@@ -60,7 +60,6 @@ public class HelpMeFragment extends Fragment {
                         turnOnBluetooth(true);
                     }
 
-
                 } else {
                     if (mediaPlayer.isPlaying()) {
                         mediaPlayer.stop();
@@ -82,39 +81,30 @@ public class HelpMeFragment extends Fragment {
         if (yes) {
             Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
             discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300);
-            startActivityForResult(discoverableIntent, 1);
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-//                new AlertDialog.Builder(getActivity())
-//                        .setTitle("Bluetooth Permission")
-//                        .setMessage("Bluetooth is required for this app to work. Please enable Bluetooth")
-//                        .setCancelable(false)
-//                        .setPositiveButton("Yes", ((dialog, which) -> {
-//                            //will ask permission if the device android version is 12 and above
-//                            if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-//                                // TODO: Consider calling
-//                                //    ActivityCompat#requestPermissions
-//                                // here to request the missing permissions, and then overriding
-//                                //   public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)
-//                                // to handle the case where the user grants the permission. See the documentation
-//                                // for ActivityCompat#requestPermissions for more details.
-//                                ActivityCompat.requestPermissions(getActivity(), BLUETOOTH_PERMISSIONS_S, 2);
-//                                return;
-//                            }
-//                            bluetoothAdapter.enable();
-//                        }))
-//                        .show();
-//            }
-        } else {
-            if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
-                return;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                new AlertDialog.Builder(getActivity())
+                        .setTitle("Bluetooth Permission")
+                        .setMessage("Bluetooth is required for this device discoverability. Please enable Bluetooth")
+                        .setCancelable(false)
+                        .setPositiveButton("Yes", ((dialog, which) -> {
+                            //will ask permission if the device android version is 12 and above
+                            if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                                // TODO: Consider calling
+                                //    ActivityCompat#requestPermissions
+                                // here to request the missing permissions, and then overriding
+                                //   public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)
+                                // to handle the case where the user grants the permission. See the documentation
+                                // for ActivityCompat#requestPermissions for more details.
+                                ActivityCompat.requestPermissions(getActivity(), BLUETOOTH_PERMISSIONS_S, 2);
+                                return;
+                            }
+                            startActivityForResult(discoverableIntent, 1);
+                        }))
+                        .show();
+            } else {
+                startActivityForResult(discoverableIntent, 1);
             }
+        } else {
             bluetoothAdapter.disable();
         }
     }
