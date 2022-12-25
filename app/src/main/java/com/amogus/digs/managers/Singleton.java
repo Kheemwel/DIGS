@@ -1,22 +1,32 @@
-package com.amogus.digs;
+package com.amogus.digs.managers;
 
+import android.Manifest;
+import android.Manifest.permission;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.location.LocationManager;
 import android.os.Build;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+import com.amogus.digs.R;
 
 import java.io.File;
 import java.util.UUID;
 
+import static androidx.core.app.ActivityCompat.requestPermissions;
+
 //used for storing methods and variables that can be shared to other classes
 public class Singleton {
-    private SharedPreferences preferences;
-    private SharedPreferences.Editor editor;
+    private final SharedPreferences preferences;
+    private final SharedPreferences.Editor editor;
     private static Context activityContext;
     private static Singleton instance;
-
     private final UUID App_UUID = UUID.fromString("16ac2bc2-82ce-11ed-a1eb-0242ac120002");
 
     private Singleton(Context activityContext) {
@@ -78,4 +88,5 @@ public class Singleton {
     public UUID getThisAppUUID() {
         return App_UUID;
     }
+
 }

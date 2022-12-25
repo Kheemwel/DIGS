@@ -1,7 +1,7 @@
 package com.amogus.digs;
 
 import android.Manifest;
-import android.app.AlertDialog;
+import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
@@ -15,12 +15,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.ToggleButton;
-import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import com.amogus.digs.managers.Singleton;
 
 //this is the java fragment for helpme fragment
 public class HelpMeFragment extends Fragment {
+    private Singleton singleton;
     private MediaPlayer mediaPlayer;
     private AudioManager audioManager;
     private BluetoothAdapter bluetoothAdapter;
@@ -35,6 +38,8 @@ public class HelpMeFragment extends Fragment {
         //once this java fragment is called, it will display the helpme fragment to the fragment container
         //which is the frame layout
         View view = inflater.inflate(R.layout.fragment_help_me, container, false);
+
+        singleton = Singleton.getInstance(getActivity());
 
         mediaPlayer = MediaPlayer.create(getActivity(), R.raw.original_nokia);
         audioManager = (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);
@@ -55,11 +60,12 @@ public class HelpMeFragment extends Fragment {
                     mediaPlayer.setLooping(true);
                     mediaPlayer.start();
 
-                    //open bluetooth if bluetooth is diabled
-                    if (!bluetoothAdapter.isEnabled()) {
-                        turnOnBluetooth(true);
+                    //close bluetooth if enabled
+                    if (bluetoothAdapter.isEnabled()) {
+                        turnOnBluetooth(false);
                     }
-
+                    //open bluetooth
+                    turnOnBluetooth(true);
                 } else {
                     if (mediaPlayer.isPlaying()) {
                         mediaPlayer.stop();
@@ -77,35 +83,28 @@ public class HelpMeFragment extends Fragment {
         return view;
     }
 
+    @SuppressLint("MissingPermission")
     private void turnOnBluetooth(boolean yes) {
         if (yes) {
             Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
             discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                new AlertDialog.Builder(getActivity())
-                        .setTitle("Bluetooth Permission")
-                        .setMessage("Bluetooth is required for this device discoverability. Please enable Bluetooth")
-                        .setCancelable(false)
-                        .setPositiveButton("Yes", ((dialog, which) -> {
-                            //will ask permission if the device android version is 12 and above
-                            if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-                                // TODO: Consider calling
-                                //    ActivityCompat#requestPermissions
-                                // here to request the missing permissions, and then overriding
-                                //   public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)
-                                // to handle the case where the user grants the permission. See the documentation
-                                // for ActivityCompat#requestPermissions for more details.
-                                ActivityCompat.requestPermissions(getActivity(), BLUETOOTH_PERMISSIONS_S, 2);
-                                return;
-                            }
-                            startActivityForResult(discoverableIntent, 1);
-                        }))
-                        .show();
-            } else {
-                startActivityForResult(discoverableIntent, 1);
-            }
+            startActivityForResult(discoverableIntent, 1);
         } else {
             bluetoothAdapter.disable();
+        }
+    }
+
+    private ActivityResultLauncher<String> requestBluetoothPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+        if (!isGranted) {
+            //show dialog
+        }
+    });
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            requestBluetoothPermissionLauncher.launch(Manifest.permission.BLUETOOTH_CONNECT);
         }
     }
 

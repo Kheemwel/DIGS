@@ -1,6 +1,7 @@
 package com.amogus.digs;
 
 import android.app.AlertDialog;
+import android.bluetooth.BluetoothManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -15,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import com.amogus.digs.managers.Singleton;
 import com.google.android.material.navigation.NavigationView;
 
 //This is the java activity for main layout
