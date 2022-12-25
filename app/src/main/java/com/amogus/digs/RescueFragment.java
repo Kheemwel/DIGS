@@ -1,14 +1,12 @@
 package com.amogus.digs;
 
 import android.Manifest;
+import android.Manifest.permission;
 import android.annotation.SuppressLint;
-import android.app.Activity;
+import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
+import android.content.*;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,15 +15,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
+import androidx.activity.result.ActivityResultCaller;
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContract;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import com.amogus.digs.managers.Singleton;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -42,7 +39,9 @@ public class RescueFragment extends Fragment {
     private ArrayAdapter<String> arrayAdapter;
     private boolean isBroadcastReceiverRegistered = false;
     private Timer bluetoothRefreshTimer;
-    private static final String[] BLUETOOTH_PERMISSIONS_S = {Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH_CONNECT};
+
+    private AlertDialog dialog;
+    private static final String[] BLUETOOTH_PERMISSIONS_S = {permission.BLUETOOTH_SCAN, permission.BLUETOOTH_CONNECT};
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -154,28 +153,60 @@ public class RescueFragment extends Fragment {
         }
     };
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        requestLocationPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
-        requestLocationPermissionLauncher.launch(Manifest.permission.ACCESS_COARSE_LOCATION);
-        requestBluetoothPermissionLauncher.launch(Manifest.permission.BLUETOOTH_ADMIN);
+    private void requestBluetoothPermissions() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            requestBluetoothPermissionLauncher.launch(Manifest.permission.BLUETOOTH_SCAN);
+            if (ActivityCompat.checkSelfPermission(getActivity(), permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{permission.BLUETOOTH_SCAN}, singleton.getREQUESTCODE_BLUETOOTH_PERMISSIONS());
+            }
         }
     }
 
-    private ActivityResultLauncher<String> requestBluetoothPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
-        if (!isGranted) {
-            //show dialog
+    private void requestLocationPermissions() {
+        if (ActivityCompat.checkSelfPermission(getActivity(), permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{permission.ACCESS_FINE_LOCATION}, singleton.getREQUESTCODE_LOCATION_PERMISSIONS());
         }
-    });
 
-    private ActivityResultLauncher<String> requestLocationPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
-        if (!isGranted) {
-            //show dialog
+        if (ActivityCompat.checkSelfPermission(getActivity(), permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{permission.ACCESS_COARSE_LOCATION}, singleton.getREQUESTCODE_LOCATION_PERMISSIONS());
         }
-    });
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        AlertDialog permission_dialog;
+        if (requestCode == singleton.getREQUESTCODE_LOCATION_PERMISSIONS()) {
+            //this will run if the location access permission is denied
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_DENIED) {
+                permission_dialog = new AlertDialog.Builder(getActivity())
+                        .setTitle("Location Access Permission Needed")
+                        .setMessage("Location Access is required for this app to work. Please grant the permission.")
+                        .setCancelable(false)
+                        .setNeutralButton("OK", ((dialog, which) -> dialog.dismiss()))
+                        .show();
+            }
+        }
+
+        if (requestCode == singleton.getREQUESTCODE_BLUETOOTH_PERMISSIONS()) {
+            //this will run if the bluetooth permission is denied
+            if (grantResults.length > 0 && grantResults[1] == PackageManager.PERMISSION_DENIED) {
+                permission_dialog = new AlertDialog.Builder(getActivity())
+                        .setTitle("Bluetooth Permission Needed")
+                        .setMessage("Bluetooth is required for this app to work. Please grant the permission.")
+                        .setCancelable(false)
+                        .setNeutralButton("OK", (dialog, which) -> dialog.dismiss())
+                        .show();
+            }
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        requestLocationPermissions();
+        requestBluetoothPermissions();
+    }
 
     @Override
     public void onDestroy() {

@@ -1,7 +1,9 @@
 package com.amogus.digs;
 
 import android.Manifest;
+import android.Manifest.permission;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
@@ -15,11 +17,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.ToggleButton;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
-import com.amogus.digs.managers.Singleton;
 
 //this is the java fragment for helpme fragment
 public class HelpMeFragment extends Fragment {
@@ -30,7 +30,7 @@ public class HelpMeFragment extends Fragment {
     private ToggleButton btnHelp;
 
     private int origionalVolume = 0;
-    private static final String[] BLUETOOTH_PERMISSIONS_S = {Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH_CONNECT};
+    private static final String[] BLUETOOTH_PERMISSIONS_S = {permission.BLUETOOTH_SCAN, permission.BLUETOOTH_CONNECT};
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -94,18 +94,35 @@ public class HelpMeFragment extends Fragment {
         }
     }
 
-    private ActivityResultLauncher<String> requestBluetoothPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
-        if (!isGranted) {
-            //show dialog
+    private void requestBluetoothPermissions() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            if (ActivityCompat.checkSelfPermission(getActivity(), permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{permission.BLUETOOTH_CONNECT}, singleton.getREQUESTCODE_BLUETOOTH_PERMISSIONS());
+            }
         }
-    });
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        AlertDialog permission_dialog;
+        if (requestCode == singleton.getREQUESTCODE_BLUETOOTH_PERMISSIONS()) {
+            //this will run if the permission is denied
+            if (!(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                permission_dialog = new AlertDialog.Builder(getActivity())
+                        .setTitle("Bluetooth Permission Needed")
+                        .setMessage("Bluetooth is required for this app to work. Please grant the permission.")
+                        .setCancelable(false)
+                        .setNeutralButton("OK", (dialog, which) -> dialog.dismiss())
+                        .show();
+            }
+        }
+    }
 
     @Override
     public void onStart() {
         super.onStart();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            requestBluetoothPermissionLauncher.launch(Manifest.permission.BLUETOOTH_CONNECT);
-        }
+        requestBluetoothPermissions();
     }
 
     //this is called when the activity is stopped (ex: exiting the app/activity/layout)

@@ -1,25 +1,14 @@
-package com.amogus.digs.managers;
+package com.amogus.digs;
 
-import android.Manifest;
-import android.Manifest.permission;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.location.LocationManager;
 import android.os.Build;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.Fragment;
-import com.amogus.digs.R;
 
 import java.io.File;
 import java.util.UUID;
-
-import static androidx.core.app.ActivityCompat.requestPermissions;
 
 //used for storing methods and variables that can be shared to other classes
 public class Singleton {
@@ -27,6 +16,9 @@ public class Singleton {
     private final SharedPreferences.Editor editor;
     private static Context activityContext;
     private static Singleton instance;
+
+    private final int REQUESTCODE_BLUETOOTH_PERMISSIONS = 8;
+    private final int REQUESTCODE_LOCATION_PERMISSIONS = 7;
     private final UUID App_UUID = UUID.fromString("16ac2bc2-82ce-11ed-a1eb-0242ac120002");
 
     private Singleton(Context activityContext) {
@@ -80,7 +72,7 @@ public class Singleton {
     }
 
     public boolean isGPS_Enabled() {
-        LocationManager locationManager = (LocationManager)activityContext.getSystemService(Context.LOCATION_SERVICE);
+        LocationManager locationManager = (LocationManager) activityContext.getSystemService(Context.LOCATION_SERVICE);
         assert locationManager != null;
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
@@ -89,4 +81,11 @@ public class Singleton {
         return App_UUID;
     }
 
+    public int getREQUESTCODE_BLUETOOTH_PERMISSIONS() {
+        return REQUESTCODE_BLUETOOTH_PERMISSIONS;
+    }
+
+    public int getREQUESTCODE_LOCATION_PERMISSIONS() {
+        return REQUESTCODE_LOCATION_PERMISSIONS;
+    }
 }

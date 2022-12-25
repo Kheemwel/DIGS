@@ -1,7 +1,7 @@
 package com.amogus.digs;
 
 import android.app.AlertDialog;
-import android.bluetooth.BluetoothManager;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -16,7 +16,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import com.amogus.digs.managers.Singleton;
 import com.google.android.material.navigation.NavigationView;
 
 //This is the java activity for main layout
@@ -60,6 +59,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             navigationView.setCheckedItem(R.id.nav_help);
             //set the title of toolbar
             actionBar.setTitle("Help");
+        }
+
+        if (!singleton.isGPS_Enabled()) {
+            new AlertDialog.Builder(this)
+                    .setTitle("Location Permission Needed")
+                    .setMessage("Location Access is required. Please enabled Location Access in the Settings")
+                    .setCancelable(false)
+                    .setPositiveButton("Yes", ((dialog, which) -> {
+                        //will open the location access settings
+                        startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    }))
+                    .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
+                    .show();
         }
     }
 
@@ -115,18 +127,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         txtContact.setText(singleton.getContact_number());
         //get the saved image from internal storage and set it to the image view
         profilePic.setImageDrawable(singleton.getImage(imageName));
-
-        if (!singleton.isGPS_Enabled()) {
-            new AlertDialog.Builder(this)
-                    .setTitle("Location Permission Needed")
-                    .setMessage("Location Access is required. Please enabled Location Access in the Settings")
-                    .setCancelable(false)
-                    .setPositiveButton("Yes", ((dialog, which) -> {
-                        //will open the location access settings
-                        startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-                    }))
-                    .show();
-        }
     }
 
     @Override
