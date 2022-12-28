@@ -1,11 +1,16 @@
 package com.amogus.digs;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.location.LocationManager;
+import android.media.ResourceBusyException;
 import android.os.Build;
+import androidx.core.app.ActivityCompat;
 
 import java.io.File;
 import java.util.UUID;
@@ -19,7 +24,7 @@ public class Singleton {
 
     private final int REQUESTCODE_BLUETOOTH_PERMISSIONS = 8;
     private final int REQUESTCODE_LOCATION_PERMISSIONS = 7;
-    private final UUID App_UUID = UUID.fromString("16ac2bc2-82ce-11ed-a1eb-0242ac120002");
+    private final UUID APP_UUID = UUID.fromString("16ac2bc2-82ce-11ed-a1eb-0242ac120002");
 
     private Singleton(Context activityContext) {
         Singleton.activityContext = activityContext;
@@ -57,6 +62,15 @@ public class Singleton {
         editor.commit();
     }
 
+    public void saveDeviceBluetoothName(String bluetoothName) {
+        editor.putString("Device Bluetooth Name", bluetoothName);
+        editor.commit();
+    }
+
+    public String getDeviceBluetoothName() {
+        return preferences.getString("Device Bluetooth Name", "");
+    }
+
     @SuppressLint("UseCompatLoadingForDrawables")
     public Drawable getImage(String imageName) {
         File file = new File(activityContext.getFilesDir(), imageName);
@@ -78,7 +92,7 @@ public class Singleton {
     }
 
     public UUID getThisAppUUID() {
-        return App_UUID;
+        return APP_UUID;
     }
 
     public int getREQUESTCODE_BLUETOOTH_PERMISSIONS() {
@@ -87,5 +101,9 @@ public class Singleton {
 
     public int getREQUESTCODE_LOCATION_PERMISSIONS() {
         return REQUESTCODE_LOCATION_PERMISSIONS;
+    }
+
+    public String getAPP_NAME() {
+        return activityContext.getString(R.string.app_name);
     }
 }

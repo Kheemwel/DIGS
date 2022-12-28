@@ -1,6 +1,5 @@
 package com.amogus.digs;
 
-import android.Manifest;
 import android.Manifest.permission;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -18,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.ToggleButton;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
@@ -29,7 +29,7 @@ public class HelpMeFragment extends Fragment {
     private BluetoothAdapter bluetoothAdapter;
     private ToggleButton btnHelp;
 
-    private int origionalVolume = 0;
+    private int originalVolume = 0;
     private static final String[] BLUETOOTH_PERMISSIONS_S = {permission.BLUETOOTH_SCAN, permission.BLUETOOTH_CONNECT};
 
     @Override
@@ -46,7 +46,7 @@ public class HelpMeFragment extends Fragment {
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
         //get the device's original volume when the app is launched
-        origionalVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+        originalVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
 
         btnHelp = view.findViewById(R.id.btn_help);
         btnHelp.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -91,6 +91,16 @@ public class HelpMeFragment extends Fragment {
             startActivityForResult(discoverableIntent, 1);
         } else {
             bluetoothAdapter.disable();
+            bluetoothAdapter.setName(singleton.getDeviceBluetoothName());
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (bluetoothAdapter.getState() == BluetoothAdapter.STATE_ON) {
+            bluetoothAdapter.setName(singleton.getAPP_NAME() + "::" + singleton.getUser_name());
         }
     }
 
@@ -119,10 +129,12 @@ public class HelpMeFragment extends Fragment {
         }
     }
 
+    @SuppressLint("MissingPermission")
     @Override
     public void onStart() {
         super.onStart();
         requestBluetoothPermissions();
+        singleton.saveDeviceBluetoothName(bluetoothAdapter.getName());
     }
 
     //this is called when the activity is stopped (ex: exiting the app/activity/layout)
@@ -131,7 +143,7 @@ public class HelpMeFragment extends Fragment {
         btnHelp.setChecked(false);
 
         //set the device's volume to original
-        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, origionalVolume, 0);
+        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, originalVolume, 0);
         super.onStop();
     }
 }

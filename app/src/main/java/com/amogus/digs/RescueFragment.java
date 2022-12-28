@@ -144,10 +144,16 @@ public class RescueFragment extends Fragment {
                 BluetoothDevice bluetoothDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 String deviceName = bluetoothDevice.getName();
                 String deviceAdress = bluetoothDevice.getAddress();
-                Log.i(getTag(), deviceName + "\n" + deviceAdress);
+                System.out.println(deviceName);
                 if (deviceName != null) {
-                    arrayAdapter.add(bluetoothDevice.getName() + "\n" + bluetoothDevice.getAddress());
-                    arrayAdapter.notifyDataSetChanged();
+                    if (deviceName.startsWith(singleton.getAPP_NAME() + "::")) {
+                        if (deviceName.substring(6).equals("")) {
+                            arrayAdapter.add("DIGS' User" + "\n" + bluetoothDevice.getAddress());
+                        } else {
+                            arrayAdapter.add(deviceName.substring(6) + "\n" + bluetoothDevice.getAddress());
+                        }
+                        arrayAdapter.notifyDataSetChanged();
+                    }
                 }
             }
         }
