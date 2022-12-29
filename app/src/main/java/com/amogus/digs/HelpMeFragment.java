@@ -100,7 +100,7 @@ public class HelpMeFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (bluetoothAdapter.getState() == BluetoothAdapter.STATE_ON) {
-            bluetoothAdapter.setName(singleton.getAPP_NAME() + "::" + singleton.getUser_name());
+            bluetoothAdapter.setName(singleton.getAPP_NAME() + "::" + singleton.getContact_number() + "::" + singleton.getUser_name());
         }
     }
 

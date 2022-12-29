@@ -143,21 +143,43 @@ public class RescueFragment extends Fragment {
             if (action.equals(BluetoothDevice.ACTION_FOUND)) {
                 BluetoothDevice bluetoothDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 String deviceName = bluetoothDevice.getName();
-                String deviceAdress = bluetoothDevice.getAddress();
-                System.out.println(deviceName);
                 if (deviceName != null) {
                     if (deviceName.startsWith(singleton.getAPP_NAME() + "::")) {
-                        if (deviceName.substring(6).equals("")) {
-                            arrayAdapter.add("DIGS' User" + "\n" + bluetoothDevice.getAddress());
-                        } else {
-                            arrayAdapter.add(deviceName.substring(6) + "\n" + bluetoothDevice.getAddress());
-                        }
+                        arrayAdapter.add(getNameInDeviceName(deviceName) + "\n" + getContactInDeviceName(deviceName));
                         arrayAdapter.notifyDataSetChanged();
                     }
                 }
             }
         }
     };
+
+    private String getNameInDeviceName(String deviceName) {
+        String app_name = singleton.getAPP_NAME() + "::";
+        String name = "";
+        if (deviceName.startsWith(app_name)) {
+            deviceName = deviceName.replace(app_name, "");
+        }
+        name = deviceName.substring(deviceName.indexOf("::") + 2);
+        if (name.equals("")) {
+            name = "DIGS' User";
+        }
+        return name;
+    }
+
+    private String getContactInDeviceName(String deviceName) {
+        String app_name = singleton.getAPP_NAME() + "::";
+        String contact = "";
+        if (deviceName.startsWith(app_name)) {
+            deviceName = deviceName.replace(app_name, "");
+        }
+
+        if (deviceName.startsWith("::")) {
+            contact = "";
+        } else {
+            contact = deviceName.substring(0, deviceName.indexOf("::"));
+        }
+        return contact;
+    }
 
     private void requestBluetoothPermissions() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
