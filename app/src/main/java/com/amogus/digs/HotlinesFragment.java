@@ -40,7 +40,7 @@ public class HotlinesFragment extends Fragment {
         ListView listView = view.findViewById(R.id.list_hotlines);
 
         //get the resource for the view of adapter view
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(), R.layout.listview_item, contactNames);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(), R.layout.listview_item, contactNames);
         listView.setAdapter(arrayAdapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

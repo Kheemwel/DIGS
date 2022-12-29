@@ -60,19 +60,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             //set the title of toolbar
             actionBar.setTitle("Help");
         }
-
-        if (!singleton.isGPS_Enabled()) {
-            new AlertDialog.Builder(this)
-                    .setTitle("Location Permission Needed")
-                    .setMessage("Location Access is required. Please enabled Location Access in the Settings")
-                    .setCancelable(false)
-                    .setPositiveButton("Yes", ((dialog, which) -> {
-                        //will open the location access settings
-                        startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-                    }))
-                    .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
-                    .show();
-        }
     }
 
     @Override

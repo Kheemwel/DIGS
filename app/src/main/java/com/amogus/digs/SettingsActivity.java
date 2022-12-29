@@ -2,7 +2,6 @@ package com.amogus.digs;
 
 import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -15,9 +14,7 @@ import android.widget.ImageView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
 
 import java.io.*;
 
@@ -25,7 +22,6 @@ import java.io.*;
 public class SettingsActivity extends AppCompatActivity {
     private Singleton singleton;
     private ImageView profilePic;
-    private SwitchCompat gpsSwitch;
     private static final int SELECT = 100;
     private static final String imageName = "profile_pic.png";
     private static final String[] LOCATION_PERMISSIONS = { Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
@@ -51,7 +47,6 @@ public class SettingsActivity extends AppCompatActivity {
         EditText inputName = findViewById(R.id.editTextUserName);
         EditText inputContact  = findViewById(R.id.editTextContactNumber);
         profilePic = findViewById(R.id.imgProfile);
-        gpsSwitch = findViewById(R.id.gps_switch);
 
         inputName.addTextChangedListener(new TextWatcher() {
             @Override
@@ -102,32 +97,6 @@ public class SettingsActivity extends AppCompatActivity {
                 startActivityForResult(intent, SELECT);
             }
         });
-
-        gpsSwitch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (ActivityCompat.checkSelfPermission(SettingsActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
-                    ActivityCompat.requestPermissions(SettingsActivity.this, LOCATION_PERMISSIONS, 2);
-                    return;
-                }
-            }
-        });
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if (singleton.isGPS_Enabled()) {
-            gpsSwitch.setChecked(true);
-        } else {
-            gpsSwitch.setChecked(false);
-        }
     }
 
     @Override

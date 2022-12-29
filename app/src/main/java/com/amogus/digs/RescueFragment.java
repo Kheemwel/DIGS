@@ -3,6 +3,7 @@ package com.amogus.digs;
 import android.Manifest;
 import android.Manifest.permission;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -10,6 +11,7 @@ import android.content.*;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -69,7 +71,9 @@ public class RescueFragment extends Fragment {
                     }
                     turnOnBluetooth(true);
                 } else {
-                    bluetoothRefreshTimer.cancel();
+                    if (bluetoothRefreshTimer != null) {
+                        bluetoothRefreshTimer.cancel();
+                    }
                     if (bluetoothAdapter.isDiscovering()) {
                         bluetoothAdapter.cancelDiscovery();
                     }
@@ -88,26 +92,30 @@ public class RescueFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        registerBroadcastReceiver();
-        bluetoothAdapter.startDiscovery();
+        if (resultCode == Activity.RESULT_OK) {
+            registerBroadcastReceiver();
+            bluetoothAdapter.startDiscovery();
 
-        bluetoothRefreshTimer = new Timer();
-        bluetoothRefreshTimer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        arrayAdapter.clear();
-                        arrayAdapter.notifyDataSetChanged();
-                        if (bluetoothAdapter.isDiscovering()) {
-                            bluetoothAdapter.cancelDiscovery();
+            bluetoothRefreshTimer = new Timer();
+            bluetoothRefreshTimer.scheduleAtFixedRate(new TimerTask() {
+                @Override
+                public void run() {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            arrayAdapter.clear();
+                            arrayAdapter.notifyDataSetChanged();
+                            if (bluetoothAdapter.isDiscovering()) {
+                                bluetoothAdapter.cancelDiscovery();
+                            }
+                            bluetoothAdapter.startDiscovery();
                         }
-                        bluetoothAdapter.startDiscovery();
-                    }
-                });
-            }
-        }, 10000, 10000); //will start every 10 seconds, and will repeat every 10 seconds
+                    });
+                }
+            }, 10000, 10000); //will start every 10 seconds, and will repeat every 10 seconds
+        } else {
+            btnSearch.setChecked(false);
+        }
     }
 
     @SuppressLint("MissingPermission")
@@ -143,6 +151,7 @@ public class RescueFragment extends Fragment {
             if (action.equals(BluetoothDevice.ACTION_FOUND)) {
                 BluetoothDevice bluetoothDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 String deviceName = bluetoothDevice.getName();
+                System.out.println(deviceName);
                 if (deviceName != null) {
                     if (deviceName.startsWith(singleton.getAPP_NAME() + "::")) {
                         arrayAdapter.add(getNameInDeviceName(deviceName) + "\n" + getContactInDeviceName(deviceName));
@@ -190,12 +199,29 @@ public class RescueFragment extends Fragment {
     }
 
     private void requestLocationPermissions() {
-        if (ActivityCompat.checkSelfPermission(getActivity(), permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{permission.ACCESS_FINE_LOCATION}, singleton.getREQUESTCODE_LOCATION_PERMISSIONS());
-        }
+        if (singleton.isGPS_Enabled()) {
+            if (ActivityCompat.checkSelfPermission(getActivity(), permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{permission.ACCESS_FINE_LOCATION}, singleton.getREQUESTCODE_LOCATION_PERMISSIONS());
+            }
 
-        if (ActivityCompat.checkSelfPermission(getActivity(), permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{permission.ACCESS_COARSE_LOCATION}, singleton.getREQUESTCODE_LOCATION_PERMISSIONS());
+            if (ActivityCompat.checkSelfPermission(getActivity(), permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{permission.ACCESS_COARSE_LOCATION}, singleton.getREQUESTCODE_LOCATION_PERMISSIONS());
+            }
+        }
+    }
+
+    private void requestGPS() {
+        if (!singleton.isGPS_Enabled()) {
+            new AlertDialog.Builder(getActivity())
+                    .setTitle("GPS Permission")
+                    .setMessage("GPS is required for this app to work. Please enable GPS")
+                    .setCancelable(false)
+                    .setPositiveButton("Yes", ((dialog, which) -> {
+                        //will open the location access settings
+                        startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    }))
+                    .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
+                    .show();
         }
     }
 
@@ -213,6 +239,9 @@ public class RescueFragment extends Fragment {
                         .setCancelable(false)
                         .setNeutralButton("OK", ((dialog, which) -> dialog.dismiss()))
                         .show();
+            }
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                requestGPS();
             }
         }
 
@@ -232,6 +261,7 @@ public class RescueFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        requestGPS();
         requestLocationPermissions();
         requestBluetoothPermissions();
     }
@@ -239,6 +269,7 @@ public class RescueFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        bluetoothRefreshTimer.cancel();
         unregisterBroadcastReceiver();
     }
 }
