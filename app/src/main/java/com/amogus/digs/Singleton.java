@@ -24,7 +24,6 @@ public class Singleton {
 
     private final int REQUESTCODE_BLUETOOTH_PERMISSIONS = 8;
     private final int REQUESTCODE_LOCATION_PERMISSIONS = 7;
-    private final UUID APP_UUID = UUID.fromString("16ac2bc2-82ce-11ed-a1eb-0242ac120002");
 
     private Singleton(Context activityContext) {
         Singleton.activityContext = activityContext;
@@ -37,11 +36,6 @@ public class Singleton {
             instance = new Singleton(activityContext);
         }
         return instance;
-    }
-
-
-    public SharedPreferences.Editor getEditor() {
-        return editor;
     }
 
     public String getUser_name() {
@@ -89,10 +83,6 @@ public class Singleton {
         LocationManager locationManager = (LocationManager) activityContext.getSystemService(Context.LOCATION_SERVICE);
         assert locationManager != null;
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-    }
-
-    public UUID getThisAppUUID() {
-        return APP_UUID;
     }
 
     public int getREQUESTCODE_BLUETOOTH_PERMISSIONS() {

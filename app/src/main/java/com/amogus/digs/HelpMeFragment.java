@@ -31,7 +31,6 @@ public class HelpMeFragment extends Fragment {
     private ToggleButton btnHelp;
 
     private int originalVolume = 0;
-    private static final String[] BLUETOOTH_PERMISSIONS_S = {permission.BLUETOOTH_SCAN, permission.BLUETOOTH_CONNECT};
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

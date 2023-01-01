@@ -20,7 +20,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.497"
-            android:layout_marginBottom="150dp"
+            android:layout_marginBottom="100dp"
             android:background="@drawable/glossy_button"
             android:layout_marginLeft="20dp"
             android:layout_marginStart="20dp"
@@ -34,13 +34,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginBottom="100dp"
+            android:layout_marginBottom="50dp"
             app:layout_constraintBottom_toTopOf="@+id/btn_search"
             android:layout_marginLeft="20dp"
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginEnd="20dp"
-            android:background="@drawable/white_background_with_border"/>
+            android:padding="5dp"
+            android:divider="@color/white"
+            android:dividerHeight="10dp"
+            android:background="@drawable/white_background_with_black_border"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

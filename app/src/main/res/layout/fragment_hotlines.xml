@@ -19,7 +19,7 @@
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginTop="20dp"
             android:drawableRight="@drawable/ic_baseline_search"
-            android:background="@drawable/white_background_with_border"
+            android:background="@drawable/white_background_with_black_border"
             android:layout_marginLeft="20dp"
             android:layout_marginStart="20dp"
             android:layout_marginRight="20dp"
@@ -40,7 +40,7 @@
             android:padding="10dp"
             android:divider="@color/white"
             android:dividerHeight="20dp"
-            android:background="@drawable/white_background_with_border"
-            android:layout_marginTop="20dp"/>
+            android:background="@drawable/white_background_with_black_border"
+            android:layout_marginTop="20dp" android:layout_marginBottom="20dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

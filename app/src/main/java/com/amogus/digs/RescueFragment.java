@@ -1,6 +1,5 @@
 package com.amogus.digs;
 
-import android.Manifest;
 import android.Manifest.permission;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -17,15 +16,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
-import androidx.activity.result.ActivityResultCaller;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContract;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -35,15 +31,11 @@ import static android.bluetooth.BluetoothAdapter.*;
 //this is the java fragment for rescue fragment
 public class RescueFragment extends Fragment {
     private Singleton singleton;
-    private ListView listView;
     private ToggleButton btnSearch;
     private BluetoothAdapter bluetoothAdapter;
-    private ArrayAdapter<String> arrayAdapter;
+    private BluetoothDisplayAdapter bluetoothDisplayAdapter;
     private boolean isBroadcastReceiverRegistered = false;
     private Timer bluetoothRefreshTimer;
-
-    private AlertDialog dialog;
-    private static final String[] BLUETOOTH_PERMISSIONS_S = {permission.BLUETOOTH_SCAN, permission.BLUETOOTH_CONNECT};
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -55,11 +47,11 @@ public class RescueFragment extends Fragment {
         singleton = Singleton.getInstance(getActivity());
 
         btnSearch = view.findViewById(R.id.btn_search);
-        listView = view.findViewById(R.id.list_bluetooths);
+        ListView listView = view.findViewById(R.id.list_bluetooths);
         bluetoothAdapter = getDefaultAdapter();
 
-        arrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1);
-        listView.setAdapter(arrayAdapter);
+        bluetoothDisplayAdapter = new BluetoothDisplayAdapter();
+        listView.setAdapter(bluetoothDisplayAdapter);
 
         btnSearch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @SuppressLint("MissingPermission")
@@ -79,8 +71,8 @@ public class RescueFragment extends Fragment {
                     }
                     unregisterBroadcastReceiver();
                     turnOnBluetooth(false);
-                    arrayAdapter.clear();
-                    arrayAdapter.notifyDataSetChanged();
+                    bluetoothDisplayAdapter.clear();
+                    bluetoothDisplayAdapter.notifyDataSetChanged();
                 }
             }
         });
@@ -103,8 +95,8 @@ public class RescueFragment extends Fragment {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            arrayAdapter.clear();
-                            arrayAdapter.notifyDataSetChanged();
+                            bluetoothDisplayAdapter.clear();
+                            bluetoothDisplayAdapter.notifyDataSetChanged();
                             if (bluetoothAdapter.isDiscovering()) {
                                 bluetoothAdapter.cancelDiscovery();
                             }
@@ -151,11 +143,10 @@ public class RescueFragment extends Fragment {
             if (action.equals(BluetoothDevice.ACTION_FOUND)) {
                 BluetoothDevice bluetoothDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 String deviceName = bluetoothDevice.getName();
-                System.out.println(deviceName);
                 if (deviceName != null) {
                     if (deviceName.startsWith(singleton.getAPP_NAME() + "::")) {
-                        arrayAdapter.add(getNameInDeviceName(deviceName) + "\n" + getContactInDeviceName(deviceName));
-                        arrayAdapter.notifyDataSetChanged();
+                        bluetoothDisplayAdapter.add(getNameInDeviceName(deviceName), getContactInDeviceName(deviceName));
+                        bluetoothDisplayAdapter.notifyDataSetChanged();
                     }
                 }
             }
@@ -199,14 +190,12 @@ public class RescueFragment extends Fragment {
     }
 
     private void requestLocationPermissions() {
-        if (singleton.isGPS_Enabled()) {
-            if (ActivityCompat.checkSelfPermission(getActivity(), permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(new String[]{permission.ACCESS_FINE_LOCATION}, singleton.getREQUESTCODE_LOCATION_PERMISSIONS());
-            }
+        if (ActivityCompat.checkSelfPermission(getActivity(), permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{permission.ACCESS_FINE_LOCATION}, singleton.getREQUESTCODE_LOCATION_PERMISSIONS());
+        }
 
-            if (ActivityCompat.checkSelfPermission(getActivity(), permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(new String[]{permission.ACCESS_COARSE_LOCATION}, singleton.getREQUESTCODE_LOCATION_PERMISSIONS());
-            }
+        if (ActivityCompat.checkSelfPermission(getActivity(), permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{permission.ACCESS_COARSE_LOCATION}, singleton.getREQUESTCODE_LOCATION_PERMISSIONS());
         }
     }
 
@@ -262,14 +251,64 @@ public class RescueFragment extends Fragment {
     public void onStart() {
         super.onStart();
         requestGPS();
-        requestLocationPermissions();
+        if (singleton.isGPS_Enabled()) {
+            requestLocationPermissions();
+        }
         requestBluetoothPermissions();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        bluetoothRefreshTimer.cancel();
-        unregisterBroadcastReceiver();
+        btnSearch.setChecked(false);
+    }
+
+    private class BluetoothDisplayAdapter extends BaseAdapter {
+
+        private ArrayList<String> usernames;
+        private ArrayList<String> contacts;
+
+        public BluetoothDisplayAdapter() {
+            usernames = new ArrayList<>();
+            contacts = new ArrayList<>();
+        }
+
+        @Override
+        public int getCount() {
+            return usernames.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            if (convertView == null) {
+                convertView = getLayoutInflater().inflate(R.layout.listview_item_bluetooth, parent, false);
+            }
+
+            TextView username = convertView.findViewById(R.id.txt_username);
+            TextView contact = convertView.findViewById(R.id.txt_contact);
+            username.setText(usernames.get(position));
+            contact.setText(contacts.get(position));
+            return convertView;
+        }
+
+        public void add(String username, String contact) {
+            usernames.add(username);
+            contacts.add(contact);
+        }
+
+        public void clear() {
+            usernames.clear();
+            contacts.clear();
+        }
     }
 }
