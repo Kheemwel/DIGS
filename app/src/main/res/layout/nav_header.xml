@@ -13,7 +13,7 @@
             android:id="@+id/imgNavProfile"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:src="@drawable/gg_profile_white"/>
+            android:src="@drawable/baseline_account_circle_24_gray"/>
 
     <TextView
             android:id="@+id/text_username"

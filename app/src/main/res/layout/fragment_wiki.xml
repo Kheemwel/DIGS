@@ -18,7 +18,9 @@
             android:layout_marginStart="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginEnd="20dp"
-            android:layout_marginTop="20dp"/>
+            android:layout_marginTop="20dp"
+            android:dropDownVerticalOffset="48dp"
+            android:background="@color/transparent"/>
 
     <com.github.barteksc.pdfviewer.PDFView
             android:id="@+id/pdf_viewer"

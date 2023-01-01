@@ -22,6 +22,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -129,12 +130,12 @@ public class RescueFragment extends Fragment {
 
     private void unregisterBroadcastReceiver() {
         if (isBroadcastReceiverRegistered) {
-            getActivity().registerReceiver(broadcastReceiver, new IntentFilter(BluetoothDevice.ACTION_FOUND));
+            getActivity().unregisterReceiver(broadcastReceiver);
             isBroadcastReceiverRegistered = false;
         }
     }
 
-    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @SuppressLint("MissingPermission")
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -265,8 +266,8 @@ public class RescueFragment extends Fragment {
 
     private class BluetoothDisplayAdapter extends BaseAdapter {
 
-        private ArrayList<String> usernames;
-        private ArrayList<String> contacts;
+        private final ArrayList<String> usernames;
+        private final ArrayList<String> contacts;
 
         public BluetoothDisplayAdapter() {
             usernames = new ArrayList<>();

@@ -10,16 +10,17 @@
 
     <EditText
             android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_height="48dp"
             android:inputType="text"
-            android:ems="10"
+            android:ems="12"
             android:id="@+id/searchText"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            android:paddingLeft="5dp"
             android:layout_marginTop="20dp"
-            android:drawableRight="@drawable/ic_baseline_search"
-            android:background="@drawable/white_background_with_black_border"
+            android:drawableRight="@drawable/baseline_search_24_black"
+            android:background="@drawable/lightgray_background_with_black_border"
             android:layout_marginLeft="20dp"
             android:layout_marginStart="20dp"
             android:layout_marginRight="20dp"
@@ -41,6 +42,7 @@
             android:divider="@color/white"
             android:dividerHeight="20dp"
             android:background="@drawable/white_background_with_black_border"
-            android:layout_marginTop="20dp" android:layout_marginBottom="20dp"/>
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -73,7 +73,7 @@ public class Singleton {
             image = Drawable.createFromPath(file.toString());
         } else {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                image = activityContext.getDrawable(R.drawable.gg_profile_black);
+                image = activityContext.getDrawable(R.drawable.baseline_account_circle_24_gray);
             }
         }
         return image;

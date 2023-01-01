@@ -5,16 +5,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
+import android.widget.*;
 import androidx.fragment.app.Fragment;
 import com.github.barteksc.pdfviewer.PDFView;
-import com.github.barteksc.pdfviewer.scroll.ScrollHandle;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 //this is the java fragment for wiki fragment
 public class WikiFragment extends Fragment {
@@ -28,7 +24,7 @@ public class WikiFragment extends Fragment {
         //which is the frame layout
         View view = inflater.inflate(R.layout.fragment_wiki, container, false);
 
-        ArrayList<String> list = new ArrayList<String>();
+        ArrayList<String> list = new ArrayList<>();
         String[] arr;
         try {
             //get all the file names inside the assets/wiki folder
@@ -41,8 +37,8 @@ public class WikiFragment extends Fragment {
         }
 
         Spinner spinner = view.findViewById(R.id.spinner);
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, list);
-        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(), R.layout.spinner_style, list);
+        arrayAdapter.setDropDownViewResource(R.layout.spinner_item_style);
         spinner.setAdapter(arrayAdapter);
 
         //set the item selected everytime the fragment is opened

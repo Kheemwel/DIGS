@@ -4,9 +4,10 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/white_background_with_round_black_border"
+        android:textColor="@color/black"
+        android:textStyle="bold"
         android:textSize="20sp"
-        android:padding="10dp"
-        app:drawableRightCompat="@drawable/baseline_call_24_orange">
-
-</TextView>
+        android:background="@color/lightgray"
+        android:padding="5dp"
+        android:gravity="center"
+        app:drawableRightCompat="@drawable/baseline_keyboard_arrow_down_24_black"/>
