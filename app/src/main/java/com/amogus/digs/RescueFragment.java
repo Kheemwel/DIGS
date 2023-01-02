@@ -23,7 +23,6 @@ import androidx.fragment.app.Fragment;
 import com.kongqw.radarscanviewlibrary.RadarScanView;
 
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -157,9 +156,9 @@ public class RescueFragment extends Fragment {
                 if (deviceName != null) {
                     if (deviceName.startsWith(singleton.getAPP_NAME() + "::")) {
                         bluetoothDisplayAdapter.add(getNameInDeviceName(deviceName), getContactInDeviceName(deviceName));
-                        bluetoothDisplayAdapter.notifyDataSetChanged();
                     }
                 }
+                bluetoothDisplayAdapter.notifyDataSetChanged();
             }
         }
     };

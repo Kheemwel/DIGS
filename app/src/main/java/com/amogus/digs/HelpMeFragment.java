@@ -55,6 +55,7 @@ public class HelpMeFragment extends Fragment {
         btnHelp = view.findViewById(R.id.btn_help);
         pulsatorLayout = view.findViewById(R.id.pulsator);
         btnHelp.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @SuppressLint("MissingPermission")
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
@@ -72,6 +73,7 @@ public class HelpMeFragment extends Fragment {
                     //open bluetooth
                     turnOnBluetooth(true);
                 } else {
+                    bluetoothAdapter.setName(singleton.getDeviceBluetoothName());
                     if (mediaPlayer.isPlaying()) {
                         mediaPlayer.stop();
 
@@ -98,7 +100,6 @@ public class HelpMeFragment extends Fragment {
             startActivityForResult(discoverableIntent, 1);
         } else {
             bluetoothAdapter.disable();
-            bluetoothAdapter.setName(singleton.getDeviceBluetoothName());
         }
     }
 
@@ -107,10 +108,7 @@ public class HelpMeFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == DISCOVERABILITY_DURATION) {
-            if (bluetoothAdapter.getState() == BluetoothAdapter.STATE_ON) {
-                bluetoothAdapter.setName(singleton.getAPP_NAME() + "::" + singleton.getContact_number() + "::" + singleton.getUser_name());
-            }
-
+            bluetoothAdapter.setName(singleton.getAPP_NAME() + "::" + singleton.getContact_number() + "::" + singleton.getUser_name());
             pulsatorLayout.start();
         } else {
             btnHelp.setChecked(false);
