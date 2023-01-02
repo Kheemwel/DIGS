@@ -27,6 +27,20 @@
             android:layout_marginRight="20dp"
             android:layout_marginEnd="20dp"/>
 
+    <com.kongqw.radarscanviewlibrary.RadarScanView
+            android:id="@+id/radarScanView"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            app:radarBackgroundLinesColor="@color/lightgray"
+            app:radarBackgroundLinesNumber="5"
+            app:radarBackgroundLinesWidth="3"
+            app:radarScanColor="@color/orange"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_search"
+            app:layout_constraintStart_toStartOf="@+id/btn_search"
+            app:layout_constraintEnd_toEndOf="@+id/btn_search"
+            app:layout_constraintTop_toTopOf="@+id/btn_search"
+            android:visibility="invisible"/>
+
     <ListView
             android:id="@+id/list_bluetooths"
             android:layout_width="0dp"
@@ -34,7 +48,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginBottom="50dp"
+            android:layout_marginBottom="100dp"
             app:layout_constraintBottom_toTopOf="@+id/btn_search"
             android:layout_marginLeft="20dp"
             android:layout_marginStart="20dp"

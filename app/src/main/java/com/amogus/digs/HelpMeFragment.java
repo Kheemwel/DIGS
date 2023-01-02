@@ -16,11 +16,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import pl.bclogic.pulsator4droid.library.PulsatorLayout;
 
 //this is the java fragment for helpme fragment
 public class HelpMeFragment extends Fragment {
@@ -29,8 +31,10 @@ public class HelpMeFragment extends Fragment {
     private AudioManager audioManager;
     private BluetoothAdapter bluetoothAdapter;
     private ToggleButton btnHelp;
+    private PulsatorLayout pulsatorLayout;
 
     private int originalVolume = 0;
+    private int DISCOVERABILITY_DURATION = 300; //5 minutes
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -49,6 +53,7 @@ public class HelpMeFragment extends Fragment {
         originalVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
 
         btnHelp = view.findViewById(R.id.btn_help);
+        pulsatorLayout = view.findViewById(R.id.pulsator);
         btnHelp.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -76,6 +81,8 @@ public class HelpMeFragment extends Fragment {
 
                     //close bluetooth
                     turnOnBluetooth(false);
+
+                    pulsatorLayout.stop();
                 }
             }
         });
@@ -87,7 +94,7 @@ public class HelpMeFragment extends Fragment {
     private void turnOnBluetooth(boolean yes) {
         if (yes) {
             Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
-            discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300);
+            discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, DISCOVERABILITY_DURATION);
             startActivityForResult(discoverableIntent, 1);
         } else {
             bluetoothAdapter.disable();
@@ -99,10 +106,12 @@ public class HelpMeFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK) {
+        if (resultCode == DISCOVERABILITY_DURATION) {
             if (bluetoothAdapter.getState() == BluetoothAdapter.STATE_ON) {
                 bluetoothAdapter.setName(singleton.getAPP_NAME() + "::" + singleton.getContact_number() + "::" + singleton.getUser_name());
             }
+
+            pulsatorLayout.start();
         } else {
             btnHelp.setChecked(false);
         }

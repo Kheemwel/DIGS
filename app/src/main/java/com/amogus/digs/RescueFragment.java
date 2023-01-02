@@ -20,6 +20,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import com.kongqw.radarscanviewlibrary.RadarScanView;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -33,10 +34,12 @@ import static android.bluetooth.BluetoothAdapter.*;
 public class RescueFragment extends Fragment {
     private Singleton singleton;
     private ToggleButton btnSearch;
+    private RadarScanView radarScanView;
     private BluetoothAdapter bluetoothAdapter;
     private BluetoothDisplayAdapter bluetoothDisplayAdapter;
-    private boolean isBroadcastReceiverRegistered = false;
     private Timer bluetoothRefreshTimer;
+
+    private boolean isBroadcastReceiverRegistered = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -48,6 +51,7 @@ public class RescueFragment extends Fragment {
         singleton = Singleton.getInstance(getActivity());
 
         btnSearch = view.findViewById(R.id.btn_search);
+        radarScanView = view.findViewById(R.id.radarScanView);
         ListView listView = view.findViewById(R.id.list_bluetooths);
         bluetoothAdapter = getDefaultAdapter();
 
@@ -74,6 +78,9 @@ public class RescueFragment extends Fragment {
                     turnOnBluetooth(false);
                     bluetoothDisplayAdapter.clear();
                     bluetoothDisplayAdapter.notifyDataSetChanged();
+
+                    radarScanView.stopScan();
+                    radarScanView.setVisibility(View.INVISIBLE);
                 }
             }
         });
@@ -106,6 +113,9 @@ public class RescueFragment extends Fragment {
                     });
                 }
             }, 10000, 10000); //will start every 10 seconds, and will repeat every 10 seconds
+
+            radarScanView.setVisibility(View.VISIBLE);
+            radarScanView.startScan();
         } else {
             btnSearch.setChecked(false);
         }
@@ -145,6 +155,8 @@ public class RescueFragment extends Fragment {
                 BluetoothDevice bluetoothDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 String deviceName = bluetoothDevice.getName();
                 if (deviceName != null) {
+                    bluetoothDisplayAdapter.add(bluetoothDevice.getName(), bluetoothDevice.getAddress());
+                    bluetoothDisplayAdapter.notifyDataSetChanged();
                     if (deviceName.startsWith(singleton.getAPP_NAME() + "::")) {
                         bluetoothDisplayAdapter.add(getNameInDeviceName(deviceName), getContactInDeviceName(deviceName));
                         bluetoothDisplayAdapter.notifyDataSetChanged();
