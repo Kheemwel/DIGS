@@ -155,8 +155,6 @@ public class RescueFragment extends Fragment {
                 BluetoothDevice bluetoothDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 String deviceName = bluetoothDevice.getName();
                 if (deviceName != null) {
-                    bluetoothDisplayAdapter.add(bluetoothDevice.getName(), bluetoothDevice.getAddress());
-                    bluetoothDisplayAdapter.notifyDataSetChanged();
                     if (deviceName.startsWith(singleton.getAPP_NAME() + "::")) {
                         bluetoothDisplayAdapter.add(getNameInDeviceName(deviceName), getContactInDeviceName(deviceName));
                         bluetoothDisplayAdapter.notifyDataSetChanged();
