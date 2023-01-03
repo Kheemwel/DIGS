@@ -11,7 +11,6 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -149,47 +148,19 @@ public class RescueFragment extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            Log.i(getTag(), intent.getAction());
             if (action.equals(BluetoothDevice.ACTION_FOUND)) {
                 BluetoothDevice bluetoothDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 String deviceName = bluetoothDevice.getName();
+                System.out.println(deviceName);
                 if (deviceName != null) {
                     if (deviceName.startsWith(singleton.getAPP_NAME() + "::")) {
-                        bluetoothDisplayAdapter.add(getNameInDeviceName(deviceName), getContactInDeviceName(deviceName));
+                        bluetoothDisplayAdapter.add(deviceName);
                     }
                 }
                 bluetoothDisplayAdapter.notifyDataSetChanged();
             }
         }
     };
-
-    private String getNameInDeviceName(String deviceName) {
-        String app_name = singleton.getAPP_NAME() + "::";
-        String name = "";
-        if (deviceName.startsWith(app_name)) {
-            deviceName = deviceName.replace(app_name, "");
-        }
-        name = deviceName.substring(deviceName.indexOf("::") + 2);
-        if (name.equals("")) {
-            name = "DIGS' User";
-        }
-        return name;
-    }
-
-    private String getContactInDeviceName(String deviceName) {
-        String app_name = singleton.getAPP_NAME() + "::";
-        String contact = "";
-        if (deviceName.startsWith(app_name)) {
-            deviceName = deviceName.replace(app_name, "");
-        }
-
-        if (deviceName.startsWith("::")) {
-            contact = "";
-        } else {
-            contact = deviceName.substring(0, deviceName.indexOf("::"));
-        }
-        return contact;
-    }
 
     private void requestBluetoothPermissions() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -311,7 +282,16 @@ public class RescueFragment extends Fragment {
             return convertView;
         }
 
-        public void add(String username, String contact) {
+        public void add(String deviceName) {
+            String[] parts = deviceName.split("::");
+            String username = "DIGS' User";
+            String contact = "";
+            if (parts.length > 1) {
+                username = parts[1].equals("") ? username : parts[1];
+            }
+            if (parts.length > 2) {
+                contact = parts[2];
+            }
             usernames.add(username);
             contacts.add(contact);
         }

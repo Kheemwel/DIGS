@@ -1,19 +1,13 @@
 package com.amogus.digs;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
-import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.location.LocationManager;
-import android.media.ResourceBusyException;
 import android.os.Build;
-import androidx.core.app.ActivityCompat;
 
 import java.io.File;
-import java.util.UUID;
 
 //used for storing methods and variables that can be shared to other classes
 public class Singleton {
@@ -44,7 +38,7 @@ public class Singleton {
 
     public void setUser_name(String user_name) {
         editor.putString("User Name", user_name);
-        editor.commit();
+        editor.apply();
     }
 
     public String getContact_number() {
@@ -53,12 +47,12 @@ public class Singleton {
 
     public void setContact_number(String contact_number) {
         editor.putString("Contact Number", contact_number);
-        editor.commit();
+        editor.apply();
     }
 
     public void saveDeviceBluetoothName(String bluetoothName) {
         editor.putString("Device Bluetooth Name", bluetoothName);
-        editor.commit();
+        editor.apply();
     }
 
     public String getDeviceBluetoothName() {

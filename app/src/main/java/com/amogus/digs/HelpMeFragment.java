@@ -108,7 +108,7 @@ public class HelpMeFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == DISCOVERABILITY_DURATION) {
-            bluetoothAdapter.setName(singleton.getAPP_NAME() + "::" + singleton.getContact_number() + "::" + singleton.getUser_name());
+            bluetoothAdapter.setName(singleton.getAPP_NAME() + "::" + singleton.getUser_name() + "::" + singleton.getContact_number());
             pulsatorLayout.start();
         } else {
             btnHelp.setChecked(false);

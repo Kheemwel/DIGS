@@ -42,7 +42,7 @@ public class WikiFragment extends Fragment {
         spinner.setAdapter(arrayAdapter);
 
         //set the item selected everytime the fragment is opened
-        spinner.setSelection(list.indexOf("mema"));
+        spinner.setSelection(list.indexOf("Disaster"));
 
         pdfView = view.findViewById(R.id.pdf_viewer);
 
