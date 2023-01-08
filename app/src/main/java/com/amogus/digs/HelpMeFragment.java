@@ -2,7 +2,6 @@ package com.amogus.digs;
 
 import android.Manifest.permission;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
@@ -16,17 +15,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import com.amogus.digs.utilities.AppInfo;
+import com.amogus.digs.utilities.BluetoothHandler;
+import com.amogus.digs.utilities.SharedPrefManager;
 import pl.bclogic.pulsator4droid.library.PulsatorLayout;
 
 //this is the java fragment for helpme fragment
 public class HelpMeFragment extends Fragment {
-    private Singleton singleton;
+    private SharedPrefManager sharedPrefManager;
     private MediaPlayer mediaPlayer;
     private AudioManager audioManager;
     private BluetoothAdapter bluetoothAdapter;
@@ -43,7 +44,7 @@ public class HelpMeFragment extends Fragment {
         //which is the frame layout
         View view = inflater.inflate(R.layout.fragment_help_me, container, false);
 
-        singleton = Singleton.getInstance(getActivity());
+        sharedPrefManager = SharedPrefManager.getInstance(getActivity());
 
         mediaPlayer = MediaPlayer.create(getActivity(), R.raw.original_nokia);
         audioManager = (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);
@@ -54,6 +55,7 @@ public class HelpMeFragment extends Fragment {
 
         btnHelp = view.findViewById(R.id.btn_help);
         pulsatorLayout = view.findViewById(R.id.pulsator);
+
         btnHelp.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @SuppressLint("MissingPermission")
             @Override
@@ -73,7 +75,7 @@ public class HelpMeFragment extends Fragment {
                     //open bluetooth
                     turnOnBluetooth(true);
                 } else {
-                    bluetoothAdapter.setName(singleton.getDeviceBluetoothName());
+                    bluetoothAdapter.setName(sharedPrefManager.getDeviceBluetoothName());
                     if (mediaPlayer.isPlaying()) {
                         mediaPlayer.stop();
 
@@ -108,7 +110,7 @@ public class HelpMeFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == DISCOVERABILITY_DURATION) {
-            bluetoothAdapter.setName(singleton.getAPP_NAME() + "::" + singleton.getUser_name() + "::" + singleton.getContact_number());
+            bluetoothAdapter.setName(AppInfo.getApplicationName(getActivity()) + "::" + sharedPrefManager.getUser_name() + "::" + sharedPrefManager.getContact_number());
             pulsatorLayout.start();
         } else {
             btnHelp.setChecked(false);
@@ -118,7 +120,11 @@ public class HelpMeFragment extends Fragment {
     private void requestBluetoothPermissions() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             if (ActivityCompat.checkSelfPermission(getActivity(), permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(new String[]{permission.BLUETOOTH_CONNECT}, singleton.getREQUESTCODE_BLUETOOTH_PERMISSIONS());
+                requestPermissions(new String[]{permission.BLUETOOTH_CONNECT}, BluetoothHandler.REQUESTCODE_BLUETOOTH_PERMISSIONS);
+            }
+
+            if (ActivityCompat.checkSelfPermission(getActivity(), permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{permission.BLUETOOTH_SCAN}, BluetoothHandler.REQUESTCODE_BLUETOOTH_PERMISSIONS);
             }
         }
     }
@@ -127,7 +133,7 @@ public class HelpMeFragment extends Fragment {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         AlertDialog permission_dialog;
-        if (requestCode == singleton.getREQUESTCODE_BLUETOOTH_PERMISSIONS()) {
+        if (requestCode == BluetoothHandler.REQUESTCODE_BLUETOOTH_PERMISSIONS) {
             //this will run if the permission is denied
             if (!(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                 permission_dialog = new AlertDialog.Builder(getActivity())
@@ -145,7 +151,7 @@ public class HelpMeFragment extends Fragment {
     public void onStart() {
         super.onStart();
         requestBluetoothPermissions();
-        singleton.saveDeviceBluetoothName(bluetoothAdapter.getName());
+        sharedPrefManager.saveDeviceBluetoothName(bluetoothAdapter.getName());
     }
 
     //this is called when the activity is stopped (ex: exiting the app/activity/layout)

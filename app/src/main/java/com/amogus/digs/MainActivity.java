@@ -1,10 +1,7 @@
 package com.amogus.digs;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -16,15 +13,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import com.amogus.digs.utilities.SharedPrefManager;
 import com.google.android.material.navigation.NavigationView;
 
 //This is the java activity for main layout
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
-    private Toolbar toolbar;
     private ActionBar actionBar;
-    private Singleton singleton;
+    private SharedPrefManager sharedPrefManager;
     private static final String imageName = "profile_pic.png";
 
     @Override
@@ -34,9 +31,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
 
         //getting the instance of the Singleton
-        singleton = Singleton.getInstance(this);
+        sharedPrefManager = SharedPrefManager.getInstance(this);
 
-        toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         //this will display the toolbar by supporting it
         setSupportActionBar(toolbar);
         actionBar = getSupportActionBar();
@@ -109,11 +106,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ImageView profilePic = navigation_header.findViewById(R.id.imgNavProfile);
 
         //get the saved username from shared preference and set it to the textview
-        txtName.setText(singleton.getUser_name());
+        txtName.setText(sharedPrefManager.getUser_name());
         //get the saved contact from shared preference and set it to the textview
-        txtContact.setText(singleton.getContact_number());
+        txtContact.setText(sharedPrefManager.getContact_number());
         //get the saved image from internal storage and set it to the image view
-        profilePic.setImageDrawable(singleton.getImage(imageName));
     }
 
     @Override

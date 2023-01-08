@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import com.amogus.digs.utilities.AppInfo;
+import com.amogus.digs.utilities.BluetoothHandler;
+import com.amogus.digs.utilities.GpsHandler;
+import com.amogus.digs.utilities.SharedPrefManager;
 import com.kongqw.radarscanviewlibrary.RadarScanView;
 
 import java.util.ArrayList;
@@ -30,7 +35,6 @@ import static android.bluetooth.BluetoothAdapter.*;
 
 //this is the java fragment for rescue fragment
 public class RescueFragment extends Fragment {
-    private Singleton singleton;
     private ToggleButton btnSearch;
     private RadarScanView radarScanView;
     private BluetoothAdapter bluetoothAdapter;
@@ -45,8 +49,6 @@ public class RescueFragment extends Fragment {
         //once this java fragment is called, it will display the rescue fragment to the fragment container
         //which is the frame layout
         View view = inflater.inflate(R.layout.fragment_rescue, container, false);
-
-        singleton = Singleton.getInstance(getActivity());
 
         btnSearch = view.findViewById(R.id.btn_search);
         radarScanView = view.findViewById(R.id.radarScanView);
@@ -148,40 +150,40 @@ public class RescueFragment extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
+            Log.i(getTag(), action);
             if (action.equals(BluetoothDevice.ACTION_FOUND)) {
                 BluetoothDevice bluetoothDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                String deviceName = bluetoothDevice.getName();
-                System.out.println(deviceName);
-                if (deviceName != null) {
-                    if (deviceName.startsWith(singleton.getAPP_NAME() + "::")) {
-                        bluetoothDisplayAdapter.add(deviceName);
-                    }
+                String deviceName = bluetoothDevice.getName() == null ? "N/A" : bluetoothDevice.getName();
+                Log.i(getTag(), deviceName);
+                if (deviceName.startsWith(AppInfo.getApplicationName(getActivity()) + "::")) {
+                    bluetoothDisplayAdapter.add(deviceName);
                 }
                 bluetoothDisplayAdapter.notifyDataSetChanged();
             }
         }
     };
 
+
     private void requestBluetoothPermissions() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             if (ActivityCompat.checkSelfPermission(getActivity(), permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(new String[]{permission.BLUETOOTH_SCAN}, singleton.getREQUESTCODE_BLUETOOTH_PERMISSIONS());
+                requestPermissions(new String[]{permission.BLUETOOTH_SCAN}, BluetoothHandler.REQUESTCODE_BLUETOOTH_PERMISSIONS);
             }
         }
     }
 
     private void requestLocationPermissions() {
         if (ActivityCompat.checkSelfPermission(getActivity(), permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{permission.ACCESS_FINE_LOCATION}, singleton.getREQUESTCODE_LOCATION_PERMISSIONS());
+            requestPermissions(new String[]{permission.ACCESS_FINE_LOCATION}, GpsHandler.REQUESTCODE_LOCATION_PERMISSIONS);
         }
 
         if (ActivityCompat.checkSelfPermission(getActivity(), permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{permission.ACCESS_COARSE_LOCATION}, singleton.getREQUESTCODE_LOCATION_PERMISSIONS());
+            requestPermissions(new String[]{permission.ACCESS_COARSE_LOCATION}, GpsHandler.REQUESTCODE_LOCATION_PERMISSIONS);
         }
     }
 
     private void requestGPS() {
-        if (!singleton.isGPS_Enabled()) {
+        if (!GpsHandler.isGPS_Enabled(getActivity())) {
             new AlertDialog.Builder(getActivity())
                     .setTitle("GPS Permission")
                     .setMessage("GPS is required for this app to work. Please enable GPS")
@@ -200,7 +202,7 @@ public class RescueFragment extends Fragment {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         AlertDialog permission_dialog;
-        if (requestCode == singleton.getREQUESTCODE_LOCATION_PERMISSIONS()) {
+        if (requestCode == GpsHandler.REQUESTCODE_LOCATION_PERMISSIONS) {
             //this will run if the location access permission is denied
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_DENIED) {
                 permission_dialog = new AlertDialog.Builder(getActivity())
@@ -215,7 +217,7 @@ public class RescueFragment extends Fragment {
             }
         }
 
-        if (requestCode == singleton.getREQUESTCODE_BLUETOOTH_PERMISSIONS()) {
+        if (requestCode == BluetoothHandler.REQUESTCODE_BLUETOOTH_PERMISSIONS) {
             //this will run if the bluetooth permission is denied
             if (grantResults.length > 0 && grantResults[1] == PackageManager.PERMISSION_DENIED) {
                 permission_dialog = new AlertDialog.Builder(getActivity())
@@ -232,7 +234,7 @@ public class RescueFragment extends Fragment {
     public void onStart() {
         super.onStart();
         requestGPS();
-        if (singleton.isGPS_Enabled()) {
+        if (GpsHandler.isGPS_Enabled(getActivity())) {
             requestLocationPermissions();
         }
         requestBluetoothPermissions();

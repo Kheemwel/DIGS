@@ -5,10 +5,8 @@
 
     <uses-permission android:name="android.permission.BLUETOOTH"/>
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
-    <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE"/>
-    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT"/>
     <uses-permission android:name="android.permission.BLUETOOTH_SCAN"/>
-    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
@@ -22,14 +20,14 @@
             android:supportsRtl="true"
             android:theme="@style/CustomTheme">
 
-<!--        Another activity. Just include all activity here-->
+        <!--        Another activity. Just include all activity here-->
         <activity
                 android:name=".SettingsActivity"
                 android:screenOrientation="portrait">
         </activity>
 
-<!--        This is a comment-->
-<!--        This is the main activity, this is the first layout that user will see when they open the app -->
+        <!--        This is a comment-->
+        <!--        This is the main activity, this is the first layout that user will see when they open the app -->
         <activity
                 android:name=".MainActivity"
                 android:exported="true"
