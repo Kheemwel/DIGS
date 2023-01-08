@@ -6,25 +6,25 @@
 <!--This is the list of items that will be displayed in navigation drawer-->
     <item
             android:id="@+id/nav_settings"
-            android:icon="@drawable/baseline_settings_24_gray"
+            android:icon="@drawable/digs_settings"
             android:title="@string/settings"/>
 
     <group android:checkableBehavior="single">
         <item
                 android:id="@+id/nav_help"
-                android:icon="@drawable/baseline_add_alert_24_gray"
+                android:icon="@drawable/digs_help"
                 android:title="@string/help_me"/>
         <item
                 android:id="@+id/nav_wiki"
-                android:icon="@drawable/baseline_book_24_gray"
+                android:icon="@drawable/digs_wiki"
                 android:title="@string/wiki"/>
         <item
                 android:id="@+id/nav_hotlines"
-                android:icon="@drawable/baseline_call_24_gray"
+                android:icon="@drawable/digs_hotlines"
                 android:title="@string/emergency_hotlines"/>
         <item
                 android:id="@+id/nav_rescue"
-                android:icon="@drawable/health_and_safety_24_gray"
+                android:icon="@drawable/digs_rescue"
                 android:title="@string/rescue_someone"/>
     </group>
 
