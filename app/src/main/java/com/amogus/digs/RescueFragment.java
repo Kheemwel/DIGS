@@ -166,6 +166,10 @@ public class RescueFragment extends Fragment {
 
     private void requestBluetoothPermissions() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            if (ActivityCompat.checkSelfPermission(getActivity(), permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{permission.BLUETOOTH_CONNECT}, BluetoothHandler.REQUESTCODE_BLUETOOTH_PERMISSIONS);
+            }
+
             if (ActivityCompat.checkSelfPermission(getActivity(), permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(new String[]{permission.BLUETOOTH_SCAN}, BluetoothHandler.REQUESTCODE_BLUETOOTH_PERMISSIONS);
             }
@@ -214,11 +218,9 @@ public class RescueFragment extends Fragment {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 requestGPS();
             }
-        }
-
-        if (requestCode == BluetoothHandler.REQUESTCODE_BLUETOOTH_PERMISSIONS) {
+        } else if (requestCode == BluetoothHandler.REQUESTCODE_BLUETOOTH_PERMISSIONS) {
             //this will run if the bluetooth permission is denied
-            if (grantResults.length > 0 && grantResults[1] == PackageManager.PERMISSION_DENIED) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_DENIED) {
                 new AlertDialog.Builder(getActivity())
                         .setTitle("Bluetooth Permission Needed")
                         .setMessage("Bluetooth is required for this app to work. Please grant the permission.")

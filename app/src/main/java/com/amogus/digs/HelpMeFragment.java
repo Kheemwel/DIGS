@@ -122,10 +122,6 @@ public class HelpMeFragment extends Fragment {
             if (ActivityCompat.checkSelfPermission(getActivity(), permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(new String[]{permission.BLUETOOTH_CONNECT}, BluetoothHandler.REQUESTCODE_BLUETOOTH_PERMISSIONS);
             }
-
-            if (ActivityCompat.checkSelfPermission(getActivity(), permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(new String[]{permission.BLUETOOTH_SCAN}, BluetoothHandler.REQUESTCODE_BLUETOOTH_PERMISSIONS);
-            }
         }
     }
 
