@@ -201,11 +201,10 @@ public class RescueFragment extends Fragment {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        AlertDialog permission_dialog;
         if (requestCode == GpsHandler.REQUESTCODE_LOCATION_PERMISSIONS) {
             //this will run if the location access permission is denied
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_DENIED) {
-                permission_dialog = new AlertDialog.Builder(getActivity())
+                new AlertDialog.Builder(getActivity())
                         .setTitle("Location Access Permission Needed")
                         .setMessage("Location Access is required for this app to work. Please grant the permission.")
                         .setCancelable(false)
@@ -220,7 +219,7 @@ public class RescueFragment extends Fragment {
         if (requestCode == BluetoothHandler.REQUESTCODE_BLUETOOTH_PERMISSIONS) {
             //this will run if the bluetooth permission is denied
             if (grantResults.length > 0 && grantResults[1] == PackageManager.PERMISSION_DENIED) {
-                permission_dialog = new AlertDialog.Builder(getActivity())
+                new AlertDialog.Builder(getActivity())
                         .setTitle("Bluetooth Permission Needed")
                         .setMessage("Bluetooth is required for this app to work. Please grant the permission.")
                         .setCancelable(false)

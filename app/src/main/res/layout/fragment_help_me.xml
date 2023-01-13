@@ -12,7 +12,7 @@
     <ToggleButton
             android:textOn="STOP"
             android:textOff="HELP ME"
-            android:textSize="40sp"
+            android:textSize="45sp"
             android:textColor="@color/white"
             android:layout_width="300dp"
             android:layout_height="300dp"
@@ -42,6 +42,7 @@
             app:layout_constraintEnd_toEndOf="@+id/btn_help"
             app:layout_constraintVertical_bias="0.56"
             app:layout_constraintStart_toStartOf="@+id/btn_help"
-    />
+    >
+    </pl.bclogic.pulsator4droid.library.PulsatorLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

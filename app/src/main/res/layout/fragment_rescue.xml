@@ -11,7 +11,7 @@
     <ToggleButton
             android:textOn="STOP"
             android:textOff="SEARCH"
-            android:textSize="20sp"
+            android:textSize="25sp"
             android:textColor="@color/white"
             android:layout_width="200dp"
             android:layout_height="200dp"
@@ -39,7 +39,7 @@
             app:layout_constraintStart_toStartOf="@+id/btn_search"
             app:layout_constraintEnd_toEndOf="@+id/btn_search"
             app:layout_constraintTop_toTopOf="@+id/btn_search"
-            android:visibility="invisible"/>
+            android:visibility="invisible" tools:visibility="visible"/>
 
     <ListView
             android:id="@+id/list_bluetooths"

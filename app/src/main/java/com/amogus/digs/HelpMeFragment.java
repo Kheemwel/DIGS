@@ -35,7 +35,7 @@ public class HelpMeFragment extends Fragment {
     private PulsatorLayout pulsatorLayout;
 
     private int originalVolume = 0;
-    private int DISCOVERABILITY_DURATION = 300; //5 minutes
+    private final int DISCOVERABILITY_DURATION = 300; //5 minutes
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -132,11 +132,10 @@ public class HelpMeFragment extends Fragment {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        AlertDialog permission_dialog;
         if (requestCode == BluetoothHandler.REQUESTCODE_BLUETOOTH_PERMISSIONS) {
             //this will run if the permission is denied
             if (!(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                permission_dialog = new AlertDialog.Builder(getActivity())
+                new AlertDialog.Builder(getActivity())
                         .setTitle("Bluetooth Permission Needed")
                         .setMessage("Bluetooth is required for this app to work. Please grant the permission.")
                         .setCancelable(false)
