@@ -46,7 +46,7 @@ public class HelpMeFragment extends Fragment {
 
         sharedPrefManager = SharedPrefManager.getInstance(getActivity());
 
-        mediaPlayer = MediaPlayer.create(getActivity(), R.raw.original_nokia);
+        mediaPlayer = MediaPlayer.create(getActivity(), R.raw.help_me_morse_code);
         audioManager = (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
