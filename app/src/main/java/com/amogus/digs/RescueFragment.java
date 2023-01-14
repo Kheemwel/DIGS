@@ -166,23 +166,35 @@ public class RescueFragment extends Fragment {
 
     private void requestBluetoothPermissions() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            if (ActivityCompat.checkSelfPermission(getActivity(), permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(new String[]{permission.BLUETOOTH_CONNECT}, BluetoothHandler.REQUESTCODE_BLUETOOTH_PERMISSIONS);
-            }
-
-            if (ActivityCompat.checkSelfPermission(getActivity(), permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(new String[]{permission.BLUETOOTH_SCAN}, BluetoothHandler.REQUESTCODE_BLUETOOTH_PERMISSIONS);
+            if ((ActivityCompat.checkSelfPermission(getActivity(), permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) || ActivityCompat.checkSelfPermission(getActivity(), permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
+                if (shouldShowRequestPermissionRationale(permission.BLUETOOTH_CONNECT) || shouldShowRequestPermissionRationale(permission.BLUETOOTH_SCAN)) {
+                    new AlertDialog.Builder(getActivity())
+                            .setTitle("Bluetooth Permission Needed")
+                            .setMessage("Bluetooth is required for this app to work. Please grant the permission.")
+                            .setCancelable(false)
+                            .setPositiveButton("OK", ((dialog, which) -> requestPermissions(new String[]{permission.BLUETOOTH_CONNECT, permission.BLUETOOTH_SCAN}, BluetoothHandler.REQUESTCODE_BLUETOOTH_PERMISSIONS)))
+                            .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                            .show();
+                } else {
+                    requestPermissions(new String[]{permission.BLUETOOTH_CONNECT, permission.BLUETOOTH_SCAN}, BluetoothHandler.REQUESTCODE_BLUETOOTH_PERMISSIONS);
+                }
             }
         }
     }
 
     private void requestLocationPermissions() {
-        if (ActivityCompat.checkSelfPermission(getActivity(), permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{permission.ACCESS_FINE_LOCATION}, GpsHandler.REQUESTCODE_LOCATION_PERMISSIONS);
-        }
-
-        if (ActivityCompat.checkSelfPermission(getActivity(), permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{permission.ACCESS_COARSE_LOCATION}, GpsHandler.REQUESTCODE_LOCATION_PERMISSIONS);
+        if ((ActivityCompat.checkSelfPermission(getActivity(), permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) || (ActivityCompat.checkSelfPermission(getActivity(), permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)) {
+            if (shouldShowRequestPermissionRationale(permission.ACCESS_FINE_LOCATION) || shouldShowRequestPermissionRationale(permission.ACCESS_COARSE_LOCATION)) {
+                new AlertDialog.Builder(getActivity())
+                        .setTitle("Location Access Permission Needed")
+                        .setMessage("Location Access is required for this app to work. Please grant the permission.")
+                        .setCancelable(false)
+                        .setPositiveButton("OK", ((dialog, which) -> requestPermissions(new String[]{permission.ACCESS_FINE_LOCATION, permission.ACCESS_COARSE_LOCATION}, GpsHandler.REQUESTCODE_LOCATION_PERMISSIONS)))
+                        .setNegativeButton("Cancel", ((dialog, which) -> dialog.dismiss()))
+                        .show();
+            } else {
+                requestPermissions(new String[]{permission.ACCESS_FINE_LOCATION, permission.ACCESS_COARSE_LOCATION}, GpsHandler.REQUESTCODE_LOCATION_PERMISSIONS);
+            }
         }
     }
 
@@ -198,36 +210,6 @@ public class RescueFragment extends Fragment {
                     }))
                     .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
                     .show();
-        }
-    }
-
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == GpsHandler.REQUESTCODE_LOCATION_PERMISSIONS) {
-            //this will run if the location access permission is denied
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_DENIED) {
-                new AlertDialog.Builder(getActivity())
-                        .setTitle("Location Access Permission Needed")
-                        .setMessage("Location Access is required for this app to work. Please grant the permission.")
-                        .setCancelable(false)
-                        .setNeutralButton("OK", ((dialog, which) -> dialog.dismiss()))
-                        .show();
-            }
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                requestGPS();
-            }
-        } else if (requestCode == BluetoothHandler.REQUESTCODE_BLUETOOTH_PERMISSIONS) {
-            //this will run if the bluetooth permission is denied
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_DENIED) {
-                new AlertDialog.Builder(getActivity())
-                        .setTitle("Bluetooth Permission Needed")
-                        .setMessage("Bluetooth is required for this app to work. Please grant the permission.")
-                        .setCancelable(false)
-                        .setNeutralButton("OK", (dialog, which) -> dialog.dismiss())
-                        .show();
-            }
         }
     }
 
