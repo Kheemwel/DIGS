@@ -11,5 +11,5 @@
     <string name="emergency_hotlines">Emergency Hotlines</string>
     <string name="rescue_someone">Rescue Someone</string>
     <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Risus nullam eget felis eget. Amet risus nullam eget felis. Imperdiet proin fermentum leo vel orci porta non pulvinar. Vestibulum mattis ullamcorper velit sed ullamcorper morbi tincidunt ornare massa. Dignissim convallis aenean et tortor at risus viverra adipiscing at. Nunc lobortis mattis aliquam faucibus purus in massa tempor nec. Ornare lectus sit amet est placerat in egestas. Ipsum suspendisse ultrices gravida dictum fusce ut placerat. Accumsan sit amet nulla facilisi morbi tempus. Enim ut tellus elementum sagittis vitae et leo duis ut. Gravida dictum fusce ut placerat orci nulla.</string>
-
+    <string name="settings_info">You are not required to input your contact number. The default username is \"DIGS\'s User\" if you didn\'t put a username.</string>
 </resources>

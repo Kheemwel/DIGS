@@ -16,14 +16,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import com.amogus.digs.utilities.AppInfo;
 import com.amogus.digs.utilities.BluetoothHandler;
 import com.amogus.digs.utilities.GpsHandler;
-import com.amogus.digs.utilities.SharedPrefManager;
 import com.kongqw.radarscanviewlibrary.RadarScanView;
 
 import java.util.ArrayList;
@@ -166,11 +164,11 @@ public class RescueFragment extends Fragment {
 
     private void requestBluetoothPermissions() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            if ((ActivityCompat.checkSelfPermission(getActivity(), permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) || ActivityCompat.checkSelfPermission(getActivity(), permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
+            if ((ActivityCompat.checkSelfPermission(getActivity(), permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) || (ActivityCompat.checkSelfPermission(getActivity(), permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED)) {
                 if (shouldShowRequestPermissionRationale(permission.BLUETOOTH_CONNECT) || shouldShowRequestPermissionRationale(permission.BLUETOOTH_SCAN)) {
                     new AlertDialog.Builder(getActivity())
                             .setTitle("Bluetooth Permission Needed")
-                            .setMessage("Bluetooth is required for this app to work. Please grant the permission.")
+                            .setMessage("Please grant the permission for Bluetooth access in order for this app to work properly.")
                             .setCancelable(false)
                             .setPositiveButton("OK", ((dialog, which) -> requestPermissions(new String[]{permission.BLUETOOTH_CONNECT, permission.BLUETOOTH_SCAN}, BluetoothHandler.REQUESTCODE_BLUETOOTH_PERMISSIONS)))
                             .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
@@ -186,11 +184,11 @@ public class RescueFragment extends Fragment {
         if ((ActivityCompat.checkSelfPermission(getActivity(), permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) || (ActivityCompat.checkSelfPermission(getActivity(), permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)) {
             if (shouldShowRequestPermissionRationale(permission.ACCESS_FINE_LOCATION) || shouldShowRequestPermissionRationale(permission.ACCESS_COARSE_LOCATION)) {
                 new AlertDialog.Builder(getActivity())
-                        .setTitle("Location Access Permission Needed")
-                        .setMessage("Location Access is required for this app to work. Please grant the permission.")
+                        .setTitle("Location Access Permission Required")
+                        .setMessage("In order to use this feature, please grant location access permission.")
                         .setCancelable(false)
-                        .setPositiveButton("OK", ((dialog, which) -> requestPermissions(new String[]{permission.ACCESS_FINE_LOCATION, permission.ACCESS_COARSE_LOCATION}, GpsHandler.REQUESTCODE_LOCATION_PERMISSIONS)))
-                        .setNegativeButton("Cancel", ((dialog, which) -> dialog.dismiss()))
+                        .setPositiveButton("OK", (dialog, which) -> requestPermissions(new String[]{permission.ACCESS_FINE_LOCATION, permission.ACCESS_COARSE_LOCATION}, GpsHandler.REQUESTCODE_LOCATION_PERMISSIONS))
+                        .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
                         .show();
             } else {
                 requestPermissions(new String[]{permission.ACCESS_FINE_LOCATION, permission.ACCESS_COARSE_LOCATION}, GpsHandler.REQUESTCODE_LOCATION_PERMISSIONS);
@@ -201,8 +199,8 @@ public class RescueFragment extends Fragment {
     private void requestGPS() {
         if (!GpsHandler.isGPS_Enabled(getActivity())) {
             new AlertDialog.Builder(getActivity())
-                    .setTitle("GPS Permission")
-                    .setMessage("GPS is required for this app to work. Please enable GPS")
+                    .setTitle("GPS")
+                    .setMessage("This application requires GPS to work properly, do you want to enable it?")
                     .setCancelable(false)
                     .setPositiveButton("Yes", ((dialog, which) -> {
                         //will open the location access settings

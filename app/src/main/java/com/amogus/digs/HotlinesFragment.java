@@ -1,6 +1,7 @@
 package com.amogus.digs;
 
-import android.Manifest;
+import android.Manifest.permission;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -51,8 +52,18 @@ public class HotlinesFragment extends Fragment {
                 callIntent.setData(Uri.parse(contact));
 
                 //check permission
-                if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CALL_PHONE}, 2);
+                if (ActivityCompat.checkSelfPermission(getActivity(), permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                    if (shouldShowRequestPermissionRationale(permission.CALL_PHONE)) {
+                        new AlertDialog.Builder(getActivity())
+                                .setTitle("Call Permission Needed")
+                                .setMessage("Call is required for this app to work. Please grant the permission.")
+                                .setCancelable(false)
+                                .setPositiveButton("OK", ((dialog, which) -> requestPermissions(new String[]{permission.CALL_PHONE}, 1)))
+                                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                                .show();
+                    } else {
+                        requestPermissions(new String[]{permission.CALL_PHONE}, 1);
+                    }
                     return;
                 }
                 startActivity(callIntent);

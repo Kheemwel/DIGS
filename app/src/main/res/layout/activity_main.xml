@@ -47,6 +47,7 @@
             app:itemIconTint="@drawable/nav_item_color_state"
             app:itemTextColor="@drawable/nav_item_color_state"
             app:itemBackground="@drawable/nav_item_highlight"
-            android:background="@color/white"/>
+            android:background="@color/white"
+            app:itemTextAppearance="?android:attr/textAppearanceMedium"/>
 
 </androidx.drawerlayout.widget.DrawerLayout>
