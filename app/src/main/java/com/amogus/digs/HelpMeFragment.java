@@ -60,19 +60,23 @@ public class HelpMeFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    //set the volume to max
-                    //audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
+                    if (isBluetoothPermissionsGranted()) {
+                        //set the volume to max
+                        //audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
 
-                    //set the audio to play in loop
-                    mediaPlayer.setLooping(true);
-                    mediaPlayer.start();
+                        //set the audio to play in loop
+                        mediaPlayer.setLooping(true);
+                        mediaPlayer.start();
 
-                    //close bluetooth if enabled
-                    if (bluetoothAdapter.isEnabled()) {
-                        turnOnBluetooth(false);
+                        //close bluetooth if enabled
+                        if (bluetoothAdapter.isEnabled()) {
+                            turnOnBluetooth(false);
+                        }
+                        //open bluetooth
+                        turnOnBluetooth(true);
+                    } else {
+                        btnHelp.setChecked(false);
                     }
-                    //open bluetooth
-                    turnOnBluetooth(true);
                 } else {
                     bluetoothAdapter.setName(sharedPrefManager.getDeviceBluetoothName());
                     if (mediaPlayer.isPlaying()) {
@@ -116,7 +120,7 @@ public class HelpMeFragment extends Fragment {
         }
     }
 
-    private void requestBluetoothPermissions() {
+    private boolean isBluetoothPermissionsGranted() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             if ((ActivityCompat.checkSelfPermission(getActivity(), permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) || (ActivityCompat.checkSelfPermission(getActivity(), permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED)) {
                 if (shouldShowRequestPermissionRationale(permission.BLUETOOTH_CONNECT) || shouldShowRequestPermissionRationale(permission.BLUETOOTH_SCAN)) {
@@ -130,15 +134,16 @@ public class HelpMeFragment extends Fragment {
                 } else {
                     requestPermissions(new String[]{permission.BLUETOOTH_CONNECT, permission.BLUETOOTH_SCAN}, BluetoothHandler.REQUESTCODE_BLUETOOTH_PERMISSIONS);
                 }
+                return false;
             }
         }
+        return true;
     }
 
     @SuppressLint("MissingPermission")
     @Override
     public void onStart() {
         super.onStart();
-        requestBluetoothPermissions();
         sharedPrefManager.saveDeviceBluetoothName(bluetoothAdapter.getName());
     }
 

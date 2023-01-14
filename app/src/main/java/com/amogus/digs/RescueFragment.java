@@ -8,6 +8,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.*;
 import android.content.pm.PackageManager;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -21,7 +22,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import com.amogus.digs.utilities.AppInfo;
 import com.amogus.digs.utilities.BluetoothHandler;
-import com.amogus.digs.utilities.GpsHandler;
+import com.amogus.digs.utilities.GPSHandler;
 import com.kongqw.radarscanviewlibrary.RadarScanView;
 
 import java.util.ArrayList;
@@ -61,10 +62,14 @@ public class RescueFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    if (bluetoothAdapter.isEnabled()) {
-                        turnOnBluetooth(false);
+                    if (isGPS_Enabled() && isLocationPermissionsGranted() && isBluetoothPermissionsGranted()) {
+                        if (bluetoothAdapter.isEnabled()) {
+                            turnOnBluetooth(false);
+                        }
+                        turnOnBluetooth(true);
+                    } else {
+                        btnSearch.setChecked(false);
                     }
-                    turnOnBluetooth(true);
                 } else {
                     if (bluetoothRefreshTimer != null) {
                         bluetoothRefreshTimer.cancel();
@@ -161,8 +166,7 @@ public class RescueFragment extends Fragment {
         }
     };
 
-
-    private void requestBluetoothPermissions() {
+    private boolean isBluetoothPermissionsGranted() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             if ((ActivityCompat.checkSelfPermission(getActivity(), permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) || (ActivityCompat.checkSelfPermission(getActivity(), permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED)) {
                 if (shouldShowRequestPermissionRationale(permission.BLUETOOTH_CONNECT) || shouldShowRequestPermissionRationale(permission.BLUETOOTH_SCAN)) {
@@ -176,49 +180,52 @@ public class RescueFragment extends Fragment {
                 } else {
                     requestPermissions(new String[]{permission.BLUETOOTH_CONNECT, permission.BLUETOOTH_SCAN}, BluetoothHandler.REQUESTCODE_BLUETOOTH_PERMISSIONS);
                 }
+                return false;
             }
         }
+        return true;
     }
 
-    private void requestLocationPermissions() {
+    private boolean isLocationPermissionsGranted() {
         if ((ActivityCompat.checkSelfPermission(getActivity(), permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) || (ActivityCompat.checkSelfPermission(getActivity(), permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)) {
             if (shouldShowRequestPermissionRationale(permission.ACCESS_FINE_LOCATION) || shouldShowRequestPermissionRationale(permission.ACCESS_COARSE_LOCATION)) {
                 new AlertDialog.Builder(getActivity())
                         .setTitle("Location Access Permission Required")
                         .setMessage("In order to use this feature, please grant location access permission.")
                         .setCancelable(false)
-                        .setPositiveButton("OK", (dialog, which) -> requestPermissions(new String[]{permission.ACCESS_FINE_LOCATION, permission.ACCESS_COARSE_LOCATION}, GpsHandler.REQUESTCODE_LOCATION_PERMISSIONS))
+                        .setPositiveButton("OK", (dialog, which) -> requestPermissions(new String[]{permission.ACCESS_FINE_LOCATION, permission.ACCESS_COARSE_LOCATION}, GPSHandler.REQUESTCODE_LOCATION_PERMISSIONS))
                         .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
                         .show();
             } else {
-                requestPermissions(new String[]{permission.ACCESS_FINE_LOCATION, permission.ACCESS_COARSE_LOCATION}, GpsHandler.REQUESTCODE_LOCATION_PERMISSIONS);
+                requestPermissions(new String[]{permission.ACCESS_FINE_LOCATION, permission.ACCESS_COARSE_LOCATION}, GPSHandler.REQUESTCODE_LOCATION_PERMISSIONS);
             }
+            return false;
         }
+        return true;
     }
 
-    private void requestGPS() {
-        if (!GpsHandler.isGPS_Enabled(getActivity())) {
+    private boolean isGPS_Enabled() {
+        LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        assert locationManager != null;
+        boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        if (!isGPSEnabled) {
             new AlertDialog.Builder(getActivity())
                     .setTitle("GPS")
                     .setMessage("This application requires GPS to work properly, do you want to enable it?")
                     .setCancelable(false)
                     .setPositiveButton("Yes", ((dialog, which) -> {
                         //will open the location access settings
-                        startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                        startActivityForResult(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), 1);
                     }))
                     .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
                     .show();
         }
+        return isGPSEnabled;
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        requestGPS();
-        if (GpsHandler.isGPS_Enabled(getActivity())) {
-            requestLocationPermissions();
-        }
-        requestBluetoothPermissions();
     }
 
     @Override
