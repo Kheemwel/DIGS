@@ -2,6 +2,7 @@ package com.amogus.digs;
 
 import android.Manifest.permission;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
@@ -24,6 +25,8 @@ import com.amogus.digs.utilities.BluetoothHandler;
 import com.amogus.digs.utilities.SharedPrefManager;
 import pl.bclogic.pulsator4droid.library.PulsatorLayout;
 
+import static android.bluetooth.BluetoothAdapter.ACTION_REQUEST_ENABLE;
+
 //this is the java fragment for helpme fragment
 public class HelpMeFragment extends Fragment {
     private SharedPrefManager sharedPrefManager;
@@ -34,7 +37,7 @@ public class HelpMeFragment extends Fragment {
     private PulsatorLayout pulsatorLayout;
 
     private int originalVolume = 0;
-    private final int DISCOVERABILITY_DURATION = 300; //5 minutes
+    private final int DISCOVERABILITY_DURATION = 3600; //1 hour
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
