@@ -64,6 +64,9 @@ public class HelpMeFragment extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     if (isBluetoothPermissionsGranted()) {
+                        //save the original bluetooth name
+                        sharedPrefManager.saveDeviceBluetoothName(bluetoothAdapter.getName());
+
                         //set the volume to max
                         //audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
 
@@ -147,7 +150,6 @@ public class HelpMeFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        sharedPrefManager.saveDeviceBluetoothName(bluetoothAdapter.getName());
     }
 
     //this is called when the activity is stopped (ex: exiting the app/activity/layout)
