@@ -11,12 +11,10 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.ListView;
+import android.widget.*;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -41,8 +39,11 @@ public class HotlinesFragment extends Fragment {
         ListView listView = view.findViewById(R.id.list_hotlines);
 
         //get the resource for the view of adapter view
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(), R.layout.listview_item_hotlines, contactNames);
-        listView.setAdapter(arrayAdapter);
+//        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(), R.layout.listview_item_hotlines, contactNames);
+//        listView.setAdapter(arrayAdapter);
+
+        HotlinesDisplayAdapter hotlinesDisplayAdapter = new HotlinesDisplayAdapter(contactNames, contactNumbers);
+        listView.setAdapter(hotlinesDisplayAdapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -79,13 +80,15 @@ public class HotlinesFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 //filter the listview while typing
-                arrayAdapter.getFilter().filter(s);
+//                arrayAdapter.getFilter().filter(s);
+                hotlinesDisplayAdapter.getFilter().filter(s);
             }
 
             @Override
             public void afterTextChanged(Editable s) {
                 //filter the listview after typing
-                arrayAdapter.getFilter().filter(s);
+//                arrayAdapter.getFilter().filter(s);
+                hotlinesDisplayAdapter.getFilter().filter(s);
             }
         });
 
@@ -118,6 +121,87 @@ public class HotlinesFragment extends Fragment {
             catch (IOException e) {
                 throw new RuntimeException("Error while closing input stream: " + e);
             }
+        }
+    }
+
+    private class HotlinesDisplayAdapter extends BaseAdapter implements Filterable {
+        private final ArrayList<String> hotlineNames;
+        private final ArrayList<String> hotlineContacts;
+        private ArrayList<String> filteredNames;
+        private ArrayList<String> filteredContacts;
+
+        public HotlinesDisplayAdapter(ArrayList<String> names, ArrayList<String> contacts) {
+            hotlineNames = names;
+            hotlineContacts = contacts;
+            filteredNames = names;
+            filteredContacts = contacts;
+        }
+
+        @Override
+        public int getCount() {
+            return filteredNames.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            if (convertView == null) {
+                convertView = getLayoutInflater().inflate(R.layout.listview_item_hotlines, parent, false);
+            }
+
+            TextView txtHotlineName = convertView.findViewById(R.id.txt_hotlines_name);
+            TextView txtHotlineContact = convertView.findViewById(R.id.txt_hotlines_contact);
+
+            txtHotlineName.setText(filteredNames.get(position));
+            txtHotlineContact.setText(String.format("#%s", filteredContacts.get(position)));
+
+            return convertView;
+        }
+
+        @Override
+        public Filter getFilter() {
+            return new Filter() {
+                @Override
+                protected FilterResults performFiltering(CharSequence charSequence) {
+                    String searchString = charSequence.toString().toLowerCase();
+                    if (searchString.isEmpty()) {
+                        filteredNames = hotlineNames;
+                        filteredContacts = hotlineContacts;
+                    } else {
+                        ArrayList<String> filteredList1 = new ArrayList<>();
+                        ArrayList<String> filteredList2 = new ArrayList<>();
+                        for (int i = 0; i < hotlineNames.size(); i++) {
+                            String name = hotlineNames.get(i);
+                            String contact = hotlineContacts.get(i);
+                            if (name.toLowerCase().contains(searchString) || contact.toLowerCase().contains(searchString)) {
+                                filteredList1.add(name);
+                                filteredList2.add(contact);
+                            }
+                        }
+                        filteredNames = filteredList1;
+                        filteredContacts = filteredList2;
+                    }
+                    FilterResults filterResults = new FilterResults();
+                    filterResults.values = filteredNames;
+                    filterResults.count = filteredNames.size();
+                    return filterResults;
+                }
+
+                @Override
+                protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                    filteredNames = (ArrayList<String>) filterResults.values;
+                    notifyDataSetChanged();
+                }
+            };
         }
     }
 }

@@ -20,9 +20,9 @@ import android.widget.*;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
-import com.amogus.digs.utilities.AppInfo;
-import com.amogus.digs.utilities.BluetoothHandler;
-import com.amogus.digs.utilities.GPSHandler;
+import com.amogus.digs.utilities.AppUtils;
+import com.amogus.digs.utilities.BluetoothUtils;
+import com.amogus.digs.utilities.GPSUtils;
 import com.kongqw.radarscanviewlibrary.RadarScanView;
 
 import java.util.ArrayList;
@@ -158,7 +158,7 @@ public class RescueFragment extends Fragment {
                 BluetoothDevice bluetoothDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 String deviceName = bluetoothDevice.getName() == null ? "N/A" : bluetoothDevice.getName();
                 Log.i(getTag(), deviceName);
-                if (deviceName.startsWith(AppInfo.getApplicationName(getActivity()) + "::")) {
+                if (deviceName.startsWith(AppUtils.getApplicationName(getActivity()) + "::")) {
                     bluetoothDisplayAdapter.add(deviceName);
                 }
                 bluetoothDisplayAdapter.notifyDataSetChanged();
@@ -174,11 +174,11 @@ public class RescueFragment extends Fragment {
                             .setTitle("Bluetooth Permission Needed")
                             .setMessage("Please grant the permission for Bluetooth access in order for this app to work properly.")
                             .setCancelable(false)
-                            .setPositiveButton("OK", ((dialog, which) -> requestPermissions(new String[]{permission.BLUETOOTH_CONNECT, permission.BLUETOOTH_SCAN}, BluetoothHandler.REQUESTCODE_BLUETOOTH_PERMISSIONS)))
+                            .setPositiveButton("OK", ((dialog, which) -> requestPermissions(new String[]{permission.BLUETOOTH_CONNECT, permission.BLUETOOTH_SCAN}, BluetoothUtils.REQUESTCODE_BLUETOOTH_PERMISSIONS)))
                             .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
                             .show();
                 } else {
-                    requestPermissions(new String[]{permission.BLUETOOTH_CONNECT, permission.BLUETOOTH_SCAN}, BluetoothHandler.REQUESTCODE_BLUETOOTH_PERMISSIONS);
+                    requestPermissions(new String[]{permission.BLUETOOTH_CONNECT, permission.BLUETOOTH_SCAN}, BluetoothUtils.REQUESTCODE_BLUETOOTH_PERMISSIONS);
                 }
                 return false;
             }
@@ -193,11 +193,11 @@ public class RescueFragment extends Fragment {
                         .setTitle("Location Access Permission Required")
                         .setMessage("In order to use this feature, please grant location access permission.")
                         .setCancelable(false)
-                        .setPositiveButton("OK", (dialog, which) -> requestPermissions(new String[]{permission.ACCESS_FINE_LOCATION, permission.ACCESS_COARSE_LOCATION}, GPSHandler.REQUESTCODE_LOCATION_PERMISSIONS))
+                        .setPositiveButton("OK", (dialog, which) -> requestPermissions(new String[]{permission.ACCESS_FINE_LOCATION, permission.ACCESS_COARSE_LOCATION}, GPSUtils.REQUESTCODE_LOCATION_PERMISSIONS))
                         .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
                         .show();
             } else {
-                requestPermissions(new String[]{permission.ACCESS_FINE_LOCATION, permission.ACCESS_COARSE_LOCATION}, GPSHandler.REQUESTCODE_LOCATION_PERMISSIONS);
+                requestPermissions(new String[]{permission.ACCESS_FINE_LOCATION, permission.ACCESS_COARSE_LOCATION}, GPSUtils.REQUESTCODE_LOCATION_PERMISSIONS);
             }
             return false;
         }
@@ -235,7 +235,6 @@ public class RescueFragment extends Fragment {
     }
 
     private class BluetoothDisplayAdapter extends BaseAdapter {
-
         private final ArrayList<String> usernames;
         private final ArrayList<String> contacts;
 
@@ -274,14 +273,8 @@ public class RescueFragment extends Fragment {
 
         public void add(String deviceName) {
             String[] parts = deviceName.split("::");
-            String username = "DIGS' User";
-            String contact = "";
-            if (parts.length > 1) {
-                username = parts[1].equals("") ? username : parts[1];
-            }
-            if (parts.length > 2) {
-                contact = parts[2];
-            }
+            String username = parts[0];
+            String contact = parts[1].equals("#") ? "" : parts[1];
             usernames.add(username);
             contacts.add(contact);
         }

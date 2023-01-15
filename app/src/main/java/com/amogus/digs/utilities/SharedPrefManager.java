@@ -2,19 +2,15 @@ package com.amogus.digs.utilities;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.location.LocationManager;
-import com.amogus.digs.R;
 
 //used for storing methods and variables that can be shared to other classes
 public class SharedPrefManager {
     private final SharedPreferences preferences;
     private final SharedPreferences.Editor editor;
-    private static Context activityContext;
     private static SharedPrefManager instance;
 
     private SharedPrefManager(Context activityContext) {
-        SharedPrefManager.activityContext = activityContext;
-        preferences = SharedPrefManager.activityContext.getSharedPreferences("digs_preferences", Context.MODE_PRIVATE);
+        preferences = activityContext.getSharedPreferences("digs_preferences", Context.MODE_PRIVATE);
         editor = preferences.edit();
     }
 

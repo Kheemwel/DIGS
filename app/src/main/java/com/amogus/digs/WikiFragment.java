@@ -25,10 +25,9 @@ public class WikiFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_wiki, container, false);
 
         ArrayList<String> list = new ArrayList<>();
-        String[] arr;
         try {
             //get all the file names inside the assets/wiki folder
-            arr = getActivity().getAssets().list("wiki");
+            String[] arr = getActivity().getAssets().list("wiki");
             for (String file : arr) {
                 list.add(file.replace(".pdf", ""));
             }

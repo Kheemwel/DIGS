@@ -2,7 +2,6 @@ package com.amogus.digs;
 
 import android.Manifest.permission;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
@@ -20,12 +19,10 @@ import android.widget.ToggleButton;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
-import com.amogus.digs.utilities.AppInfo;
-import com.amogus.digs.utilities.BluetoothHandler;
+import com.amogus.digs.utilities.AppUtils;
+import com.amogus.digs.utilities.BluetoothUtils;
 import com.amogus.digs.utilities.SharedPrefManager;
 import pl.bclogic.pulsator4droid.library.PulsatorLayout;
-
-import static android.bluetooth.BluetoothAdapter.ACTION_REQUEST_ENABLE;
 
 //this is the java fragment for helpme fragment
 public class HelpMeFragment extends Fragment {
@@ -68,7 +65,7 @@ public class HelpMeFragment extends Fragment {
                         sharedPrefManager.saveDeviceBluetoothName(bluetoothAdapter.getName());
 
                         //set the volume to max
-                        //audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
+                        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
 
                         //set the audio to play in loop
                         mediaPlayer.setLooping(true);
@@ -119,7 +116,9 @@ public class HelpMeFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == DISCOVERABILITY_DURATION) {
-            bluetoothAdapter.setName(AppInfo.getApplicationName(getActivity()) + "::" + sharedPrefManager.getUser_name() + "::" + sharedPrefManager.getContact_number());
+            String name = sharedPrefManager.getUser_name().equals("") ? "DIG's User": sharedPrefManager.getUser_name();
+            String contact = sharedPrefManager.getContact_number().equals("") ? "#": sharedPrefManager.getContact_number();
+            bluetoothAdapter.setName(AppUtils.getApplicationName(getActivity()) + "::" +  name + "::" + contact);
             pulsatorLayout.start();
         } else {
             btnHelp.setChecked(false);
@@ -134,11 +133,11 @@ public class HelpMeFragment extends Fragment {
                             .setTitle("Bluetooth Permission Needed")
                             .setMessage("Please grant the permission for Bluetooth access in order for this app to work properly.")
                             .setCancelable(false)
-                            .setPositiveButton("OK", ((dialog, which) -> requestPermissions(new String[]{permission.BLUETOOTH_CONNECT, permission.BLUETOOTH_SCAN}, BluetoothHandler.REQUESTCODE_BLUETOOTH_PERMISSIONS)))
+                            .setPositiveButton("OK", ((dialog, which) -> requestPermissions(new String[]{permission.BLUETOOTH_CONNECT, permission.BLUETOOTH_SCAN}, BluetoothUtils.REQUESTCODE_BLUETOOTH_PERMISSIONS)))
                             .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
                             .show();
                 } else {
-                    requestPermissions(new String[]{permission.BLUETOOTH_CONNECT, permission.BLUETOOTH_SCAN}, BluetoothHandler.REQUESTCODE_BLUETOOTH_PERMISSIONS);
+                    requestPermissions(new String[]{permission.BLUETOOTH_CONNECT, permission.BLUETOOTH_SCAN}, BluetoothUtils.REQUESTCODE_BLUETOOTH_PERMISSIONS);
                 }
                 return false;
             }
@@ -154,11 +153,11 @@ public class HelpMeFragment extends Fragment {
 
     //this is called when the activity is stopped (ex: exiting the app/activity/layout)
     @Override
-    public void onStop() {
+    public void onDestroy() {
         btnHelp.setChecked(false);
 
         //set the device's volume to original
         audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, originalVolume, 0);
-        super.onStop();
+        super.onDestroy();
     }
 }
