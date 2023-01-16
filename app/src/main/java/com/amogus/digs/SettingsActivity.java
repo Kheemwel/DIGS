@@ -10,9 +10,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import com.amogus.digs.utilities.SharedPrefManager;
 
+import static com.amogus.digs.utilities.SharedPrefManager.*;
+
 //This is the java activity for settings layout
 public class SettingsActivity extends AppCompatActivity {
-    private SharedPrefManager sharedPrefManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,8 +21,8 @@ public class SettingsActivity extends AppCompatActivity {
         //this will display the settings layout.
         setContentView(R.layout.activity_settings);
 
-        //getting the instance of the Singleton
-        sharedPrefManager = SharedPrefManager.getInstance(this);
+        //intialize the SharedPrefUtils to use the shared preferences
+        SharedPrefManager.initialize(this);
 
         Toolbar toolbar = findViewById(R.id.toolbar_settings);
         //this will display the toolbar
@@ -49,7 +50,7 @@ public class SettingsActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                sharedPrefManager.setUser_name(s.toString());
+                setUser_name(s.toString());
             }
         });
 
@@ -66,14 +67,14 @@ public class SettingsActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                sharedPrefManager.setContact_number(s.toString());
+                setContact_number(s.toString());
             }
         });
 
         //get the saved username from shared preference and set it to the edittext
-        inputName.setText(sharedPrefManager.getUser_name());
+        inputName.setText(getUser_name());
         //get the saved contact from shared preference and set it to the edittext
-        inputContact.setText(sharedPrefManager.getContact_number());
+        inputContact.setText(getContact_number());
         //get the saved image from internal storage and set it to the image view
     }
 

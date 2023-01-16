@@ -16,13 +16,13 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.amogus.digs.utilities.SharedPrefManager;
 import com.google.android.material.navigation.NavigationView;
 
+import static com.amogus.digs.utilities.SharedPrefManager.*;
+
 //This is the java activity for main layout
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private ActionBar actionBar;
-    private SharedPrefManager sharedPrefManager;
-    private static final String imageName = "profile_pic.png";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,8 +30,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //since this is the activity for main layout this code will display the layout.
         setContentView(R.layout.activity_main);
 
-        //getting the instance of the Singleton
-        sharedPrefManager = SharedPrefManager.getInstance(this);
+        //intialize the SharedPrefUtils to use the shared preferences
+        SharedPrefManager.initialize(this);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         //this will display the toolbar by supporting it
@@ -106,9 +106,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ImageView profilePic = navigation_header.findViewById(R.id.imgNavProfile);
 
         //get the saved username from shared preference and set it to the textview
-        txtName.setText(sharedPrefManager.getUser_name());
+        txtName.setText(getUser_name());
         //get the saved contact from shared preference and set it to the textview
-        txtContact.setText(sharedPrefManager.getContact_number());
+        txtContact.setText(getContact_number());
         //get the saved image from internal storage and set it to the image view
     }
 

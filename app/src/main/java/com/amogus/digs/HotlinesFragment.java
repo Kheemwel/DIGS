@@ -14,17 +14,12 @@ import android.view.ViewGroup;
 import android.widget.*;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
-import org.w3c.dom.Text;
+import com.amogus.digs.utilities.CSVParser;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.*;
 
 //this is the java fragment for hotlines fragment
 public class HotlinesFragment extends Fragment {
-    private ArrayList<String> contactNames, contactNumbers;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -33,15 +28,16 @@ public class HotlinesFragment extends Fragment {
         //which is the frame layout
         View view = inflater.inflate(R.layout.fragment_hotlines, container, false);
 
-        readCSV();
+        //readCSV();
+        CSVParser csvParser = new CSVParser(getActivity(), R.raw.hotlines, ",");
+        ArrayList<String> contactNames = csvParser.getArrayList(0);
+        ArrayList<String> contactNumbers = csvParser.getArrayList(1);
 
         EditText searchText = view.findViewById(R.id.searchText);
         ListView listView = view.findViewById(R.id.list_hotlines);
 
-        //get the resource for the view of adapter view
-//        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(), R.layout.listview_item_hotlines, contactNames);
-//        listView.setAdapter(arrayAdapter);
 
+        //initializing the custom adapter
         HotlinesDisplayAdapter hotlinesDisplayAdapter = new HotlinesDisplayAdapter(contactNames, contactNumbers);
         listView.setAdapter(hotlinesDisplayAdapter);
 
@@ -80,48 +76,17 @@ public class HotlinesFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 //filter the listview while typing
-//                arrayAdapter.getFilter().filter(s);
                 hotlinesDisplayAdapter.getFilter().filter(s);
             }
 
             @Override
             public void afterTextChanged(Editable s) {
                 //filter the listview after typing
-//                arrayAdapter.getFilter().filter(s);
                 hotlinesDisplayAdapter.getFilter().filter(s);
             }
         });
 
         return view;
-    }
-
-    private void readCSV() {
-        InputStream inputStream = getResources().openRawResource(R.raw.hotlines);
-        contactNames = new ArrayList<String>();
-        contactNumbers = new ArrayList<String>();
-
-        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-        try {
-            String csvLine;
-            while ((csvLine = reader.readLine()) != null) {
-                String[] row = csvLine.split(",");
-                //get the first text that is before comma
-                contactNames.add(row[0]);
-                //get the second text that is after the comma
-                contactNumbers.add(row[1]);
-            }
-        }
-        catch (IOException ex) {
-            throw new RuntimeException("Error in reading CSV file: " + ex);
-        }
-        finally {
-            try {
-                inputStream.close();
-            }
-            catch (IOException e) {
-                throw new RuntimeException("Error while closing input stream: " + e);
-            }
-        }
     }
 
     private class HotlinesDisplayAdapter extends BaseAdapter implements Filterable {

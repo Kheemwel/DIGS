@@ -24,9 +24,10 @@ import com.amogus.digs.utilities.BluetoothUtils;
 import com.amogus.digs.utilities.SharedPrefManager;
 import pl.bclogic.pulsator4droid.library.PulsatorLayout;
 
+import static com.amogus.digs.utilities.SharedPrefManager.*;
+
 //this is the java fragment for helpme fragment
 public class HelpMeFragment extends Fragment {
-    private SharedPrefManager sharedPrefManager;
     private MediaPlayer mediaPlayer;
     private AudioManager audioManager;
     private BluetoothAdapter bluetoothAdapter;
@@ -43,7 +44,8 @@ public class HelpMeFragment extends Fragment {
         //which is the frame layout
         View view = inflater.inflate(R.layout.fragment_help_me, container, false);
 
-        sharedPrefManager = SharedPrefManager.getInstance(getActivity());
+        //intialize the SharedPrefUtils to use the shared preferences
+        SharedPrefManager.initialize(getActivity());
 
         mediaPlayer = MediaPlayer.create(getActivity(), R.raw.help_me_morse_code);
         audioManager = (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);
@@ -62,7 +64,7 @@ public class HelpMeFragment extends Fragment {
                 if (isChecked) {
                     if (isBluetoothPermissionsGranted()) {
                         //save the original bluetooth name
-                        sharedPrefManager.saveDeviceBluetoothName(bluetoothAdapter.getName());
+                        saveDeviceBluetoothName(bluetoothAdapter.getName());
 
                         //set the volume to max
                         audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
@@ -81,7 +83,7 @@ public class HelpMeFragment extends Fragment {
                         btnHelp.setChecked(false);
                     }
                 } else {
-                    bluetoothAdapter.setName(sharedPrefManager.getDeviceBluetoothName());
+                    bluetoothAdapter.setName(getDeviceBluetoothName());
                     if (mediaPlayer.isPlaying()) {
                         mediaPlayer.stop();
 
@@ -116,8 +118,8 @@ public class HelpMeFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == DISCOVERABILITY_DURATION) {
-            String name = sharedPrefManager.getUser_name().equals("") ? "DIG's User": sharedPrefManager.getUser_name();
-            String contact = sharedPrefManager.getContact_number().equals("") ? "#": sharedPrefManager.getContact_number();
+            String name = getUser_name().equals("") ? "DIG's User": getUser_name();
+            String contact = getContact_number().equals("") ? "#": getContact_number();
             bluetoothAdapter.setName(AppUtils.getApplicationName(getActivity()) + "::" +  name + "::" + contact);
             pulsatorLayout.start();
         } else {
