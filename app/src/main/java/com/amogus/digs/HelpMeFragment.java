@@ -118,8 +118,8 @@ public class HelpMeFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == DISCOVERABILITY_DURATION) {
-            String name = getUser_name().equals("") ? "DIG's User": getUser_name();
-            String contact = getContact_number().equals("") ? "#": getContact_number();
+            String name = getFullName().equals("") ? "DIG's User": getFullName();
+            String contact = getContactNumber().equals("") ? "#": getContactNumber();
             bluetoothAdapter.setName(AppUtils.getApplicationName(getActivity()) + "::" +  name + "::" + contact);
             pulsatorLayout.start();
         } else {

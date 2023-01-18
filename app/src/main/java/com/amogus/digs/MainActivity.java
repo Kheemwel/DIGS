@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import com.amogus.digs.utilities.AppUtils;
 import com.amogus.digs.utilities.SharedPrefManager;
 import com.google.android.material.navigation.NavigationView;
 
@@ -23,6 +24,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private ActionBar actionBar;
+    private String userType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         //intialize the SharedPrefUtils to use the shared preferences
         SharedPrefManager.initialize(this);
+        userType = SharedPrefManager.getUserType();
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         //this will display the toolbar by supporting it
@@ -46,16 +49,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
+        if (userType.equals(AppUtils.user_civilian)) {
+            navigationView.inflateMenu(R.menu.nav_menu_civilian);
+        } else {
+            navigationView.inflateMenu(R.menu.nav_menu_authority);
+        }
+
         //this will run if the save instancestate is null
         if (savedInstanceState == null) {
             //this will change the content of the framelayout of the main activity layout
             //the content of the frame layout can be change by fragments
-            //the frame layout will display the helpme fragment if the user start the app
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HelpMeFragment()).commit();
-            //set the helpme item in the navigation drawer selected
-            navigationView.setCheckedItem(R.id.nav_help);
-            //set the title of toolbar
-            actionBar.setTitle("Help");
+            if (userType.equals(AppUtils.user_civilian)) {
+                //the frame layout will display the helpme fragment if the user start the app
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HelpMeFragment()).commit();
+                //set the helpme item in the navigation drawer selected
+                navigationView.setCheckedItem(R.id.nav_help);
+                //set the title of toolbar
+                actionBar.setTitle("Help");
+            } else {
+                //the frame layout will display the rescue fragment if the user start the app
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new RescueFragment()).commit();
+                //set the rescue item in the navigation drawer selected
+                navigationView.setCheckedItem(R.id.nav_rescue);
+                //set the title of toolbar
+                actionBar.setTitle("Rescue");
+            }
         }
     }
 
@@ -103,13 +121,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         TextView txtName = navigation_header.findViewById(R.id.text_username);
         TextView txtContact = navigation_header.findViewById(R.id.text_contactnumber);
+        TextView txtUserType = navigation_header.findViewById(R.id.navtxt_UserType);
         ImageView profilePic = navigation_header.findViewById(R.id.imgNavProfile);
 
         //get the saved username from shared preference and set it to the textview
-        txtName.setText(getUser_name());
+        txtName.setText(getFullName());
         //get the saved contact from shared preference and set it to the textview
-        txtContact.setText(getContact_number());
-        //get the saved image from internal storage and set it to the image view
+        txtContact.setText(getContactNumber());
+        //set the image based on the user type
+        if (userType.equals(AppUtils.user_civilian)) {
+            profilePic.setImageDrawable(getResources().getDrawable(R.drawable.emoji_person_female));
+        } else {
+            profilePic.setImageDrawable(getResources().getDrawable(R.drawable.emoji_police));
+        }
+
+        txtUserType.setText(userType);
     }
 
     @Override

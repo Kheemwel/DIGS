@@ -14,20 +14,20 @@ public class SharedPrefManager {
         editor = preferences.edit();
     }
 
-    public static String getUser_name() {
+    public static String getFullName() {
         return preferences.getString("User Name", "");
     }
 
-    public static void setUser_name(String user_name) {
+    public static void setFullName(String user_name) {
         editor.putString("User Name", user_name);
         editor.apply();
     }
 
-    public static String getContact_number() {
+    public static String getContactNumber() {
         return preferences.getString("Contact Number", "");
     }
 
-    public static void setContact_number(String contact_number) {
+    public static void setContactNumber(String contact_number) {
         editor.putString("Contact Number", contact_number);
         editor.apply();
     }
@@ -39,5 +39,14 @@ public class SharedPrefManager {
 
     public static String getDeviceBluetoothName() {
         return preferences.getString("Device Bluetooth Name", "");
+    }
+
+    public static void setUserType(String userType) {
+        editor.putString("User Type", userType);
+        editor.apply();
+    }
+
+    public static String getUserType() {
+        return preferences.getString("User Type", "");
     }
 }

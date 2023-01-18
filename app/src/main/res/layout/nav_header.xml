@@ -4,7 +4,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="176dp"
+        android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="20dp"
         android:background="@color/orange">
@@ -12,16 +12,22 @@
     <ImageView
             android:id="@+id/imgNavProfile"
             android:layout_width="100dp"
-            android:layout_height="100dp" app:srcCompat="@mipmap/ic_launcher"/>
+            android:layout_height="100dp" app:srcCompat="@drawable/emoji_person_female"/>
+
+    <TextView
+            android:text="Civilian"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/navtxt_UserType" android:textSize="20sp"
+            android:textStyle="normal|bold" android:textColor="@color/white" android:layout_marginBottom="10dp"/>
 
     <TextView
             android:id="@+id/text_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Kimwel Beller"
+            android:text="FirstName MI LastName"
             android:textColor="@color/white"
             android:textStyle="bold"
-            android:textSize="16sp"/>
+            android:textSize="20sp"/>
 
     <TextView
             android:id="@+id/text_contactnumber"
@@ -29,6 +35,6 @@
             android:layout_height="wrap_content"
             android:text="0987654321"
             android:textColor="@color/white"
-            android:textSize="14sp"/>
+            android:textSize="16sp"/>
 
 </LinearLayout>

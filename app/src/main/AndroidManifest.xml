@@ -9,7 +9,9 @@
     <uses-permission android:name="android.permission.BLUETOOTH_SCAN"/>
     <uses-permission android:name="android.permission.CALL_PHONE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" tools:ignore="ScopedStorage"/>
+    <uses-permission
+            android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+            tools:ignore="ScopedStorage"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
@@ -20,23 +22,33 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/CustomTheme">
-
-        <!--        Another activity. Just include all activity here-->
         <activity
-                android:name=".SettingsActivity"
-                android:screenOrientation="portrait" tools:ignore="LockedOrientationActivity">
-        </activity>
-
-        <!--        This is a comment-->
-        <!--        This is the main activity, this is the first layout that user will see when they open the app -->
-        <activity
-                android:name=".MainActivity"
+                android:name=".LogInActivity"
                 android:exported="true"
-                android:screenOrientation="portrait" tools:ignore="LockedOrientationActivity">
+                android:screenOrientation="portrait"
+                tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
+
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+
+            <meta-data
+                    android:name="android.app.lib_name"
+                    android:value=""/>
+        </activity>
+        <!-- Another activity. Just include all activity here -->
+        <activity
+                android:name=".SettingsActivity"
+                android:screenOrientation="portrait"
+                tools:ignore="LockedOrientationActivity">
+        </activity>
+        <!-- This is a comment -->
+        <!-- This is the main activity, this is the first layout that user will see when they open the app -->
+        <activity
+                android:name=".MainActivity"
+                android:screenOrientation="portrait"
+                tools:ignore="LockedOrientationActivity">
         </activity>
     </application>
 

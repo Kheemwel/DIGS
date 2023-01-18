@@ -5,9 +5,11 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import com.amogus.digs.utilities.AppUtils;
 import com.amogus.digs.utilities.SharedPrefManager;
 
 import static com.amogus.digs.utilities.SharedPrefManager.*;
@@ -35,6 +37,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         EditText inputName = findViewById(R.id.editTextUserName);
         EditText inputContact  = findViewById(R.id.editTextContactNumber);
+        TextView txtUserType = findViewById(R.id.txtUserType);
         ImageView profilePic = findViewById(R.id.imgProfile);
 
         inputName.addTextChangedListener(new TextWatcher() {
@@ -50,7 +53,7 @@ public class SettingsActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                setUser_name(s.toString());
+                setFullName(s.toString());
             }
         });
 
@@ -67,15 +70,22 @@ public class SettingsActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                setContact_number(s.toString());
+                setContactNumber(s.toString());
             }
         });
 
         //get the saved username from shared preference and set it to the edittext
-        inputName.setText(getUser_name());
+        inputName.setText(getFullName());
         //get the saved contact from shared preference and set it to the edittext
-        inputContact.setText(getContact_number());
-        //get the saved image from internal storage and set it to the image view
+        inputContact.setText(getContactNumber());
+        //set the image based on the user type
+        if (SharedPrefManager.getUserType().equals(AppUtils.user_civilian)) {
+            profilePic.setImageDrawable(getResources().getDrawable(R.drawable.emoji_person_female));
+        } else {
+            profilePic.setImageDrawable(getResources().getDrawable(R.drawable.emoji_police));
+        }
+
+        txtUserType.setText(SharedPrefManager.getUserType());
     }
 
     @Override
