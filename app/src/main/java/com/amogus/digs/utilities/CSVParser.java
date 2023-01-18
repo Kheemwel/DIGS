@@ -1,7 +1,6 @@
 package com.amogus.digs.utilities;
 
 import android.content.Context;
-import com.amogus.digs.R;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,18 +13,19 @@ public class CSVParser {
     private final int resource;
     private int rowCount;
     private final String splitter;
-    private final ArrayList<ArrayList<String>> listOfArrayList = new ArrayList<>();;
+    private final ArrayList<ArrayList<String>> listOfRow;
 
     public CSVParser(Context context, int resource, String splitter) {
         this.context = context;
         this.resource = resource;
         this.splitter = splitter;
 
+        listOfRow = new ArrayList<>();;
         setRowCount();
         for (int x = 0; x < getRowCount(); x++) {
-            listOfArrayList.add(new ArrayList<>());
+            listOfRow.add(new ArrayList<>());
         }
-        setListOfArrayList();
+        setListOfRow();
     }
 
     private void setRowCount() {
@@ -44,14 +44,14 @@ public class CSVParser {
         }
     }
 
-    private void setListOfArrayList() {
+    private void setListOfRow() {
         try (InputStream inputStream = context.getResources().openRawResource(resource) ) {
             try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream))) {
                 String csvLine;
                 while ((csvLine = bufferedReader.readLine()) != null) {
                     String[] row = csvLine.split(splitter);
                     for (int x = 0; x < row.length; x++) {
-                        listOfArrayList.get(x).add(row[x]);
+                        listOfRow.get(x).add(row[x]);
                     }
                 }
             }
@@ -65,7 +65,7 @@ public class CSVParser {
         return rowCount;
     }
 
-    public ArrayList<String> getArrayList(int row) {
-        return listOfArrayList.get(row);
+    public ArrayList<String> getListOfRow(int row) {
+        return listOfRow.get(row);
     }
 }

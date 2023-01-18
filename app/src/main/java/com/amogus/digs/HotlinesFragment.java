@@ -30,8 +30,8 @@ public class HotlinesFragment extends Fragment {
 
         //readCSV();
         CSVParser csvParser = new CSVParser(getActivity(), R.raw.hotlines, ",");
-        ArrayList<String> contactNames = csvParser.getArrayList(0);
-        ArrayList<String> contactNumbers = csvParser.getArrayList(1);
+        ArrayList<String> contactNames = csvParser.getListOfRow(0);
+        ArrayList<String> contactNumbers = csvParser.getListOfRow(1);
 
         EditText searchText = view.findViewById(R.id.searchText);
         ListView listView = view.findViewById(R.id.list_hotlines);
