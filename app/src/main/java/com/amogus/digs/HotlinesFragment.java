@@ -127,7 +127,7 @@ public class HotlinesFragment extends Fragment {
             TextView txtHotlineContact = convertView.findViewById(R.id.txt_hotlines_contact);
 
             txtHotlineName.setText(filteredNames.get(position));
-            txtHotlineContact.setText(String.format("#%s", filteredContacts.get(position)));
+            txtHotlineContact.setText(filteredContacts.get(position));
 
             return convertView;
         }
