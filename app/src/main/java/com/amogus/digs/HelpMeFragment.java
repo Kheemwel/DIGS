@@ -67,7 +67,7 @@ public class HelpMeFragment extends Fragment {
                         saveDeviceBluetoothName(bluetoothAdapter.getName());
 
                         //set the volume to max
-                        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
+                        //audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
 
                         //set the audio to play in loop
                         mediaPlayer.setLooping(true);
@@ -147,13 +147,7 @@ public class HelpMeFragment extends Fragment {
         return true;
     }
 
-    @SuppressLint("MissingPermission")
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    //this is called when the activity is stopped (ex: exiting the app/activity/layout)
+    //this is called when the activity is destroyed(ex: exiting the app/activity/layout)
     @Override
     public void onDestroy() {
         btnHelp.setChecked(false);

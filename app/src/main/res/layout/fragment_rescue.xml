@@ -16,16 +16,11 @@
             android:layout_width="200dp"
             android:layout_height="200dp"
             android:id="@+id/btn_search"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.497"
-            android:layout_marginBottom="100dp"
             android:background="@drawable/glossy_button"
-            android:layout_marginLeft="20dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginEnd="20dp"/>
+            app:layout_constraintStart_toStartOf="@+id/radarScanView"
+            app:layout_constraintEnd_toEndOf="@+id/radarScanView"
+            app:layout_constraintBottom_toBottomOf="@+id/radarScanView"
+            app:layout_constraintTop_toTopOf="@+id/radarScanView"/>
 
     <com.kongqw.radarscanviewlibrary.RadarScanView
             android:id="@+id/radarScanView"
@@ -35,12 +30,10 @@
             app:radarBackgroundLinesNumber="5"
             app:radarBackgroundLinesWidth="3"
             app:radarScanColor="@color/orange"
-            app:layout_constraintBottom_toBottomOf="@+id/btn_search"
-            app:layout_constraintStart_toStartOf="@+id/btn_search"
-            app:layout_constraintEnd_toEndOf="@+id/btn_search"
-            app:layout_constraintTop_toTopOf="@+id/btn_search"
-            android:visibility="invisible" tools:visibility="visible"/>
-
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:visibility="invisible" tools:visibility="visible" android:layout_marginBottom="50dp"/>
     <ListView
             android:id="@+id/list_bluetooths"
             android:layout_width="0dp"
@@ -48,8 +41,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginBottom="100dp"
-            app:layout_constraintBottom_toTopOf="@+id/btn_search"
             android:layout_marginLeft="20dp"
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
@@ -58,6 +49,7 @@
             android:padding="5dp"
             android:divider="@color/white"
             android:dividerHeight="10dp"
-            android:background="@drawable/white_background_with_black_border"/>
+            android:background="@drawable/white_background_with_black_border"
+            app:layout_constraintBottom_toTopOf="@+id/radarScanView" android:layout_marginBottom="20dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

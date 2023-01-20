@@ -2,6 +2,8 @@ package com.amogus.digs;
 
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.text.TextWatcher;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -40,6 +42,18 @@ public class SettingsActivity extends AppCompatActivity {
         TextView txtUserType = findViewById(R.id.txtUserType);
         ImageView profilePic = findViewById(R.id.imgProfile);
 
+        InputFilter filterLetters = new InputFilter() {
+            public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+                for (int i = start; i < end; i++) {
+                    if (!Character.isLetter(source.charAt(i)) && !Character.isSpaceChar(source.charAt(i)) && source.charAt(i) != '.') {
+                        return "";
+                    }
+                }
+                return null;
+            }
+        };
+        inputName.setFilters(new InputFilter[]{filterLetters});
+        inputContact.setFilters(new InputFilter[] {new InputFilter.LengthFilter(11)});
         inputName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

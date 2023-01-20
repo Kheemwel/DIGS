@@ -44,7 +44,7 @@ public class LogInActivity extends AppCompatActivity {
         InputFilter filterLetters = new InputFilter() {
             public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
                 for (int i = start; i < end; i++) {
-                    if (!Character.isLetter(source.charAt(i)) && !Character.isSpaceChar(source.charAt(i))) {
+                    if (!Character.isLetter(source.charAt(i)) && !Character.isSpaceChar(source.charAt(i)) && source.charAt(i) != '.') {
                         return "";
                     }
                 }
@@ -79,7 +79,7 @@ public class LogInActivity extends AppCompatActivity {
                     AppUtils.showSimpleDialog(LogInActivity.this,"", "Please choose a type of user who will use this app.");
                 } else {
                     new AlertDialog.Builder(LogInActivity.this)
-                            .setMessage("Are you sure you the information you provided is correct?")
+                            .setMessage("Are you sure you the information you provided is correct? You can still change the name and contact later except the user type")
                             .setPositiveButton("Yes", ((dialog, which) -> {
                                 SharedPrefManager.setFullName(edtxt_FullName.getText().toString());
                                 SharedPrefManager.setContactNumber(edtxt_Contact.getText().toString());

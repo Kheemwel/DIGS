@@ -273,8 +273,8 @@ public class RescueFragment extends Fragment {
 
         public void add(String deviceName) {
             String[] parts = deviceName.split("::");
-            String username = parts[0];
-            String contact = parts[1].equals("#") ? "" : parts[1];
+            String username = parts[1];
+            String contact = parts[2].equals("#") ? "" : parts[2];
             usernames.add(username);
             contacts.add(contact);
         }

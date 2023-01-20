@@ -8,7 +8,7 @@
         tools:context=".WikiFragment">
 
     <Spinner
-            android:layout_width="377dp"
+            android:layout_width="0dp"
             android:layout_height="48dp"
             android:id="@+id/spinner"
             app:layout_constraintStart_toStartOf="parent"
