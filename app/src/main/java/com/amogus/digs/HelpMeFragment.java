@@ -67,7 +67,7 @@ public class HelpMeFragment extends Fragment {
                         saveDeviceBluetoothName(bluetoothAdapter.getName());
 
                         //set the volume to max
-                        //audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
+                        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
 
                         //set the audio to play in loop
                         mediaPlayer.setLooping(true);
@@ -79,6 +79,7 @@ public class HelpMeFragment extends Fragment {
                         }
                         //open bluetooth
                         turnOnBluetooth(true);
+                        pulsatorLayout.start();
                     } else {
                         btnHelp.setChecked(false);
                     }
@@ -121,7 +122,6 @@ public class HelpMeFragment extends Fragment {
             String name = getFullName().equals("") ? "DIG's User": getFullName();
             String contact = getContactNumber().equals("") ? "#": getContactNumber();
             bluetoothAdapter.setName(AppUtils.getApplicationName(getActivity()) + "::" +  name + "::" + contact);
-            pulsatorLayout.start();
         } else {
             btnHelp.setChecked(false);
         }
