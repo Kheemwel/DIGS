@@ -17,7 +17,7 @@ This app also uses bluetooth for detecting other users of this app to find and r
 \
 \
 \
-Unimplemented Features: \
+Unimplemented Features:
 1. o
 2. 8
 3. 8
