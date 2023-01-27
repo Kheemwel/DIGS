@@ -18,6 +18,7 @@ This app also uses bluetooth for detecting other users of this app to find and r
 \
 \
 **Unimplemented Features:**
-1. o
-2. 8
-3. 8
+1. Improved Design
+2. Dynamic Wiki
+3. Improved Login Function
+4. Dynamic Hotlines

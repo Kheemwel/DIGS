@@ -24,24 +24,27 @@ public class WikiFragment extends Fragment {
         //which is the frame layout
         View view = inflater.inflate(R.layout.fragment_wiki, container, false);
 
-        ArrayList<String> list = new ArrayList<>();
+        //this arraylist is made for the list of name of the pdf files
+        ArrayList<String> pdfNamesList = new ArrayList<>();
         try {
             //get all the file names inside the assets/wiki folder
-            String[] arr = getActivity().getAssets().list("wiki");
+            String[] arr = getActivity().getAssets().list("wiki"); //get the file list in the wiki folder inside the assets folder
             for (String file : arr) {
-                list.add(file.replace(".pdf", ""));
+                pdfNamesList.add(file.replace(".pdf", "")); //get the name of the pdf name and replace the .pdf to blank
             }
         } catch (IOException e) {
             Log.e(TAG, "Error, no files found in selected directory: ", e);
         }
 
         Spinner spinner = view.findViewById(R.id.spinner);
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(), R.layout.spinner_style, list);
+
+        //this arrayadapter is used for holding the style and content of the spinner
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(), R.layout.spinner_style, pdfNamesList);
         arrayAdapter.setDropDownViewResource(R.layout.spinner_item_style);
         spinner.setAdapter(arrayAdapter);
 
         //set the item selected everytime the fragment is opened
-        spinner.setSelection(list.indexOf("Disaster"));
+        spinner.setSelection(pdfNamesList.indexOf("Disaster"));
 
         pdfView = view.findViewById(R.id.pdf_viewer);
 

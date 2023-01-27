@@ -5,7 +5,5 @@ public class BluetoothUtils {
 
     public static final int REQUESTCODE_BLUETOOTH_PERMISSIONS = 8;
 
-    private BluetoothUtils() {
-
-    }
+    private BluetoothUtils() {} // private constructor to prevent instantiation
 }

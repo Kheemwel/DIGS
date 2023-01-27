@@ -42,6 +42,7 @@ public class SettingsActivity extends AppCompatActivity {
         TextView txtUserType = findViewById(R.id.txtUserType);
         ImageView profilePic = findViewById(R.id.imgProfile);
 
+        //this filter is made to block other characters and only accept letters, space, and dot
         InputFilter filterLetters = new InputFilter() {
             public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
                 for (int i = start; i < end; i++) {
@@ -52,8 +53,8 @@ public class SettingsActivity extends AppCompatActivity {
                 return null;
             }
         };
-        inputName.setFilters(new InputFilter[]{filterLetters});
-        inputContact.setFilters(new InputFilter[] {new InputFilter.LengthFilter(11)});
+        inputName.setFilters(new InputFilter[]{filterLetters}); //set the filter created above
+        inputContact.setFilters(new InputFilter[] {new InputFilter.LengthFilter(11)}); //the filter only accepts 11 digits
         inputName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -65,9 +66,10 @@ public class SettingsActivity extends AppCompatActivity {
                 //
             }
 
+            //this will be called after the user type in the textbox
             @Override
             public void afterTextChanged(Editable s) {
-                setFullName(s.toString());
+                setFullName(s.toString()); //get the text in the full name textbox and save it to the sharedpreferences
             }
         });
 
@@ -82,9 +84,10 @@ public class SettingsActivity extends AppCompatActivity {
                 //
             }
 
+            //this will be called after the user type in the textbox
             @Override
             public void afterTextChanged(Editable s) {
-                setContactNumber(s.toString());
+                setContactNumber(s.toString()); //get the text in the contact textbox and save it to the sharedpreferences
             }
         });
 

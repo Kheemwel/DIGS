@@ -31,6 +31,7 @@ public class LogInActivity extends AppCompatActivity {
             startActivity(new Intent(LogInActivity.this, MainActivity.class));
             finish();
         } else {
+            //display the layout if the condition above is not met
             setContentView(R.layout.activity_log_in);
         }
 
@@ -40,7 +41,8 @@ public class LogInActivity extends AppCompatActivity {
         RadioButton rbtn_Civilian = findViewById(R.id.rbtn_civilian);
         RadioButton rbtn_Authority = findViewById(R.id.rbtn_authority);
         Button btnLogIn = findViewById(R.id.btnLogIn);
-;
+
+        //this filter is made to block other characters and only accept letters, space, and dot
         InputFilter filterLetters = new InputFilter() {
             public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
                 for (int i = start; i < end; i++) {
@@ -51,8 +53,8 @@ public class LogInActivity extends AppCompatActivity {
                 return null;
             }
         };
-        edtxt_FullName.setFilters(new InputFilter[]{filterLetters});
-        edtxt_Contact.setFilters(new InputFilter[] {new InputFilter.LengthFilter(11)});
+        edtxt_FullName.setFilters(new InputFilter[]{filterLetters}); //set the filter created above
+        edtxt_Contact.setFilters(new InputFilter[] {new InputFilter.LengthFilter(11)}); //the filter only accepts 11 digits
 
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @SuppressLint("NonConstantResourceId")
@@ -72,12 +74,15 @@ public class LogInActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (edtxt_FullName.getText().toString().trim().isEmpty()) {
-                    edtxt_FullName.setError("This field is required");
+                    edtxt_FullName.setError("This field is required"); //show a warning in the full name textbox if it is empty
                 } else if (edtxt_Contact.getText().toString().trim().isEmpty()) {
-                    edtxt_Contact.setError("This field is required");
+                    edtxt_Contact.setError("This field is required"); //show a warning in the contact textbox if it is empty
                 } else if (!rbtn_Civilian.isChecked() && !rbtn_Authority.isChecked()) {
+                    //this method is from the AppUtils class and this will show a dialog without creating a new instance of AlertDialog
+                    //we just need to pass the necessary arguments and the method will make all the work
                     AppUtils.showSimpleDialog(LogInActivity.this,"", "Please choose a type of user who will use this app.");
                 } else {
+                    //create a new instance of AlertDialog for customization
                     new AlertDialog.Builder(LogInActivity.this)
                             .setMessage("Are you sure you the information you provided is correct? You can still change the name and contact later except the user type")
                             .setPositiveButton("Yes", ((dialog, which) -> {
@@ -88,9 +93,9 @@ public class LogInActivity extends AppCompatActivity {
                                 //open MainActivity
                                 startActivity(new Intent(LogInActivity.this, MainActivity.class));
                                 finish();
-                            }))
-                            .setNegativeButton("No", ((dialog, which) -> dialog.dismiss()))
-                            .show();
+                            })) //create a button with a function
+                            .setNegativeButton("No", ((dialog, which) -> dialog.dismiss())) //delete/hide this dialog
+                            .show(); //show this dialog
                 }
             }
         });

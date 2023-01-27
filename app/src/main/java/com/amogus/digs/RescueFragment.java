@@ -55,13 +55,14 @@ public class RescueFragment extends Fragment {
         bluetoothAdapter = getDefaultAdapter();
 
         bluetoothDisplayAdapter = new BluetoothDisplayAdapter();
-        listView.setAdapter(bluetoothDisplayAdapter);
+        listView.setAdapter(bluetoothDisplayAdapter); //put the customized adapter to the listview
 
         btnSearch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @SuppressLint("MissingPermission")
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
+                    //ask permissions first
                     if (isGPS_Enabled() && isLocationPermissionsGranted() && isBluetoothPermissionsGranted()) {
                         if (bluetoothAdapter.isEnabled()) {
                             turnOnBluetooth(false);
@@ -103,11 +104,13 @@ public class RescueFragment extends Fragment {
             bluetoothRefreshTimer.scheduleAtFixedRate(new TimerTask() {
                 @Override
                 public void run() {
+                    //this thread runs with the application
+                    //as of now this is a valid and only working thread that can be used in Android
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            bluetoothDisplayAdapter.clear();
-                            bluetoothDisplayAdapter.notifyDataSetChanged();
+                            bluetoothDisplayAdapter.clear(); //clear the listview
+                            bluetoothDisplayAdapter.notifyDataSetChanged(); //refresh the listview
                             if (bluetoothAdapter.isDiscovering()) {
                                 bluetoothAdapter.cancelDiscovery();
                             }
@@ -115,7 +118,7 @@ public class RescueFragment extends Fragment {
                         }
                     });
                 }
-            }, 10000, 10000); //will start every 10 seconds, and will repeat every 10 seconds
+            }, 10000, 10000); //will start after 10 seconds for the first time, and the code will run every 10 seconds after the initial delay
 
             radarScanView.setVisibility(View.VISIBLE);
             radarScanView.startScan();
@@ -128,13 +131,14 @@ public class RescueFragment extends Fragment {
     private void turnOnBluetooth(boolean yes) {
         if (yes) {
             Intent openBluetooth = new Intent(ACTION_REQUEST_ENABLE);
-            startActivityForResult(openBluetooth, 1);
+            startActivityForResult(openBluetooth, 1); //show a dialog asking to open the bluetooth
         } else {
-            bluetoothAdapter.disable();
+            bluetoothAdapter.disable(); //turn off bluetooth
         }
     }
 
     private void registerBroadcastReceiver() {
+        //register the broadcastreceiver if it is not yet registered
         if (!isBroadcastReceiverRegistered) {
             getActivity().registerReceiver(broadcastReceiver, new IntentFilter(BluetoothDevice.ACTION_FOUND));
             isBroadcastReceiverRegistered = true;
@@ -142,6 +146,7 @@ public class RescueFragment extends Fragment {
     }
 
     private void unregisterBroadcastReceiver() {
+        //unregister the broadcastreceiver if it is already registered
         if (isBroadcastReceiverRegistered) {
             getActivity().unregisterReceiver(broadcastReceiver);
             isBroadcastReceiverRegistered = false;
@@ -149,19 +154,23 @@ public class RescueFragment extends Fragment {
     }
 
     private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        //this will be called if the broadcast receive something
         @SuppressLint("MissingPermission")
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             Log.i(getTag(), action);
+
+            //if the received intent is the same to the bluetooth this will work
             if (action.equals(BluetoothDevice.ACTION_FOUND)) {
                 BluetoothDevice bluetoothDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                //get the bluetoothdevice name and set to N/A if null
                 String deviceName = bluetoothDevice.getName() == null ? "N/A" : bluetoothDevice.getName();
                 Log.i(getTag(), deviceName);
                 if (deviceName.startsWith(AppUtils.getApplicationName(getActivity()) + "::")) {
-                    bluetoothDisplayAdapter.add(deviceName);
+                    bluetoothDisplayAdapter.add(deviceName); //add the bluetooth name to the custom adapter
                 }
-                bluetoothDisplayAdapter.notifyDataSetChanged();
+                bluetoothDisplayAdapter.notifyDataSetChanged(); //refresh the listview
             }
         }
     };
@@ -169,6 +178,7 @@ public class RescueFragment extends Fragment {
     private boolean isBluetoothPermissionsGranted() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             if ((ActivityCompat.checkSelfPermission(getActivity(), permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) || (ActivityCompat.checkSelfPermission(getActivity(), permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED)) {
+                //will show the dialog permission again if denied
                 if (shouldShowRequestPermissionRationale(permission.BLUETOOTH_CONNECT) || shouldShowRequestPermissionRationale(permission.BLUETOOTH_SCAN)) {
                     new AlertDialog.Builder(getActivity())
                             .setTitle("Bluetooth Permission Needed")
@@ -188,6 +198,7 @@ public class RescueFragment extends Fragment {
 
     private boolean isLocationPermissionsGranted() {
         if ((ActivityCompat.checkSelfPermission(getActivity(), permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) || (ActivityCompat.checkSelfPermission(getActivity(), permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)) {
+            //will show the dialog permission again if denied
             if (shouldShowRequestPermissionRationale(permission.ACCESS_FINE_LOCATION) || shouldShowRequestPermissionRationale(permission.ACCESS_COARSE_LOCATION)) {
                 new AlertDialog.Builder(getActivity())
                         .setTitle("Location Access Permission Required")
@@ -206,7 +217,7 @@ public class RescueFragment extends Fragment {
 
     private boolean isGPS_Enabled() {
         LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-        assert locationManager != null;
+        assert locationManager != null; //assert of the locationManager is not null, if null(the condition means false) then the code below will not run
         boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
         if (!isGPSEnabled) {
             new AlertDialog.Builder(getActivity())
@@ -224,20 +235,17 @@ public class RescueFragment extends Fragment {
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
     public void onDestroy() {
-        super.onDestroy();
         btnSearch.setChecked(false);
+        super.onDestroy();
     }
 
+    //this class is made for creating a customized adapter that holds the information to be viewed in listview
     private class BluetoothDisplayAdapter extends BaseAdapter {
         private final ArrayList<String> usernames;
         private final ArrayList<String> contacts;
 
+        //create a new arraylist everytime the constructor is called
         public BluetoothDisplayAdapter() {
             usernames = new ArrayList<>();
             contacts = new ArrayList<>();
@@ -271,6 +279,7 @@ public class RescueFragment extends Fragment {
             return convertView;
         }
 
+        //add the devicename to the listview and parse it based on the custom protocol
         public void add(String deviceName) {
             String[] parts = deviceName.split("::");
             String username = parts[1];
@@ -279,6 +288,7 @@ public class RescueFragment extends Fragment {
             contacts.add(contact);
         }
 
+        //clear the contents of arraylist as well as the listview
         public void clear() {
             usernames.clear();
             contacts.clear();

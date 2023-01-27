@@ -30,8 +30,8 @@ public class HotlinesFragment extends Fragment {
 
         //readCSV();
         CSVParser csvParser = new CSVParser(getActivity(), R.raw.hotlines, ",");
-        ArrayList<String> contactNames = csvParser.getListOfRow(0);
-        ArrayList<String> contactNumbers = csvParser.getListOfRow(1);
+        ArrayList<String> contactNames = csvParser.getColumnDataList(0); //get the list of data of first column
+        ArrayList<String> contactNumbers = csvParser.getColumnDataList(1); //get the list of data of second column
 
         EditText searchText = view.findViewById(R.id.searchText);
         ListView listView = view.findViewById(R.id.list_hotlines);
@@ -39,7 +39,7 @@ public class HotlinesFragment extends Fragment {
 
         //initializing the custom adapter
         HotlinesDisplayAdapter hotlinesDisplayAdapter = new HotlinesDisplayAdapter(contactNames, contactNumbers);
-        listView.setAdapter(hotlinesDisplayAdapter);
+        listView.setAdapter(hotlinesDisplayAdapter); //put the customized adapter to the listview
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -63,7 +63,7 @@ public class HotlinesFragment extends Fragment {
                     }
                     return;
                 }
-                startActivity(callIntent);
+                startActivity(callIntent); //will open the call page
             }
         });
 
@@ -89,12 +89,14 @@ public class HotlinesFragment extends Fragment {
         return view;
     }
 
+    //this class is made for creating a customized adapter that holds the information to be viewed in listview
     private class HotlinesDisplayAdapter extends BaseAdapter implements Filterable {
         private final ArrayList<String> hotlineNames;
         private final ArrayList<String> hotlineContacts;
         private ArrayList<String> filteredNames;
         private ArrayList<String> filteredContacts;
 
+        //get the inputted arraylist in the parameters and pass it to this class arraylist
         public HotlinesDisplayAdapter(ArrayList<String> names, ArrayList<String> contacts) {
             hotlineNames = names;
             hotlineContacts = contacts;
@@ -132,6 +134,8 @@ public class HotlinesFragment extends Fragment {
             return convertView;
         }
 
+        //this method performs to filter the list of the listview
+        //P.S.: I get this code from ChatGPT, so I don't really know how it works
         @Override
         public Filter getFilter() {
             return new Filter() {
@@ -164,7 +168,7 @@ public class HotlinesFragment extends Fragment {
                 @Override
                 protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
                     filteredNames = (ArrayList<String>) filterResults.values;
-                    notifyDataSetChanged();
+                    notifyDataSetChanged(); //refresh the listview based on the filter
                 }
             };
         }

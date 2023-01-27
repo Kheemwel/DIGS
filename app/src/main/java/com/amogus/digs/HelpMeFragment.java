@@ -34,7 +34,7 @@ public class HelpMeFragment extends Fragment {
     private ToggleButton btnHelp;
     private PulsatorLayout pulsatorLayout;
 
-    private int originalVolume = 0;
+    private int originalVolume = 0; //the default should 0 to be equivalent of mute
     private final int DISCOVERABILITY_DURATION = 3600; //1 hour
 
     @Override
@@ -62,6 +62,7 @@ public class HelpMeFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
+                    //ask permissions first
                     if (isBluetoothPermissionsGranted()) {
                         //save the original bluetooth name
                         saveDeviceBluetoothName(bluetoothAdapter.getName());
@@ -77,6 +78,7 @@ public class HelpMeFragment extends Fragment {
                         if (bluetoothAdapter.isEnabled()) {
                             turnOnBluetooth(false);
                         }
+
                         //open bluetooth
                         turnOnBluetooth(true);
                         pulsatorLayout.start();
@@ -84,6 +86,7 @@ public class HelpMeFragment extends Fragment {
                         btnHelp.setChecked(false);
                     }
                 } else {
+                    //change the name of the bluetooth
                     bluetoothAdapter.setName(getDeviceBluetoothName());
                     if (mediaPlayer.isPlaying()) {
                         mediaPlayer.stop();
@@ -108,9 +111,9 @@ public class HelpMeFragment extends Fragment {
         if (yes) {
             Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
             discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, DISCOVERABILITY_DURATION);
-            startActivityForResult(discoverableIntent, 1);
+            startActivityForResult(discoverableIntent, 1); //show a dialog asking to open the bluetooth with 1hr discoverability
         } else {
-            bluetoothAdapter.disable();
+            bluetoothAdapter.disable(); //close the bluetooth
         }
     }
 
@@ -121,6 +124,8 @@ public class HelpMeFragment extends Fragment {
         if (resultCode == DISCOVERABILITY_DURATION) {
             String name = getFullName().equals("") ? "DIG's User": getFullName();
             String contact = getContactNumber().equals("") ? "#": getContactNumber();
+
+            //change the bluetooth name by combining the app's name, user's name, and contact
             bluetoothAdapter.setName(AppUtils.getApplicationName(getActivity()) + "::" +  name + "::" + contact);
         } else {
             btnHelp.setChecked(false);
@@ -130,6 +135,7 @@ public class HelpMeFragment extends Fragment {
     private boolean isBluetoothPermissionsGranted() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             if ((ActivityCompat.checkSelfPermission(getActivity(), permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) || (ActivityCompat.checkSelfPermission(getActivity(), permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED)) {
+                //will show the dialog permission again if denied
                 if (shouldShowRequestPermissionRationale(permission.BLUETOOTH_CONNECT) || shouldShowRequestPermissionRationale(permission.BLUETOOTH_SCAN)) {
                     new AlertDialog.Builder(getActivity())
                             .setTitle("Bluetooth Permission Needed")

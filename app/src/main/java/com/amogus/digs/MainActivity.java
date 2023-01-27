@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
+        //set the content of the navigation drawer based on the user type
         if (userType.equals(AppUtils.user_civilian)) {
             navigationView.inflateMenu(R.menu.nav_menu_civilian);
         } else {
