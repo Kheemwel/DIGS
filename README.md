@@ -1,6 +1,6 @@
 # DIGS (Disaster Information Guide for Survival)
 <!--- comment --->
-Project namin para sa Application Development and Emerging Technologies \
+*Project namin para sa Application Development and Emerging Technologies* \
 \
 \
 Project Manager: Perry Andre Moya  \
@@ -17,7 +17,7 @@ This app also uses bluetooth for detecting other users of this app to find and r
 \
 \
 \
-Unimplemented Features:
+*Unimplemented Features:*
 1. o
 2. 8
 3. 8
