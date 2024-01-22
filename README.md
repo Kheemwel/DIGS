@@ -1,6 +1,6 @@
 # DIGS (Disaster Information Guide for Survival)
 <!--- comment --->
-**Project namin para sa Application Development and Emerging Technologies** \
+**Group Project for Application Development and Emerging Technologies** \
 \
 \
 Project Manager: Perry Andre Moya  \
